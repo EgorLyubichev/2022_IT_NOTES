@@ -1,3 +1,4 @@
+/*
 - - - Interface SET<E> - - -
 public interface Set<E> extends Collection<E>
 
@@ -65,6 +66,7 @@ Methods inherited from interface java.lang.Iterable: forEach
 
 - - - Interface Queue<E> - - -
 public interface Queue<E> extends Collection<E>
+There are 3 classes to implement the interface Queue: PriorityQueue, LinkedList & ArrayDeque.
 
 						Summary of Queue methods:
 Insert: 	add(e) - Throws exception		offer(e) - Returns special value
@@ -77,6 +79,7 @@ Methods inherited from interface java.lang.Iterable: forEach.
 
 - - - Interface Deque<E> - - -
 public interface Deque<E> extends Queue<E>
+This interface is implemented in the LinkedList, ArrayDeque classes and the multithreaded LinkedBlockingDeque class.
 
 Summary of Deque methods:
 			|		First element (Head)		|		Last Element (Tail)			|
@@ -110,6 +113,63 @@ Stack Method 	| Equivalent Deque Method
 push(e)			| addFirst(e)
 pop(e)			| removeFirst(e)
 peek()			| peekFirst()
+*/
 
+public class QueueExamples{
+	public static void main(String[] args){
+		Queue<String> queueStr = new LinkedList<String>(){{
+			this.add("First Line")
+		}};
+		queueStr.add("Second Line");
+		queueStr.offer("Third Line");
+		//Выше показаны три способа добавления объектов в очередь.
+		queueStr.remove(); // удаляет первостоящий объект из очереди (по принципу: первый вошёл - первый вышел)
+		queueStr.remove("Third Line") // удаляет указанный объект
+		queueStr.forEach(System.out::println) // выводит в консоль очередь
+		queueStr.clear() // очищает очередь
+		// queueStr.element(); - генерирует Exception в случае пустой очереди
+		// queueStr.peek(); - возвращает значение null в случае пустой очереди
+		
+		Queue<String> secondQueue = new LinkedList<>();
+        secondQueue.add("One");
+        secondQueue.add("Two");
+        secondQueue.add("Three");
+        secondQueue.add("Four");
+        secondQueue.removeIf(s -> s.endsWith("e")); // этот метод удаляет элементы, если они заканчиваются на "е"
+		
+		//Далее фильтрация будет происходить при помощи стримов.
+        // Причем, стрим не удаляет имеющиеся уже в очереди объекты. Он создает на её основе новую очередь,
+        // которую при желании можно поместить в новую очередь.
+		
+		Queue<String> thirdQueue = new LinkedList<String>(){{
+            this.offer("Father");
+            this.offer("Mother");
+            this.offer("Daughter");
+            this.offer("Son");
+        }};
+        thirdQueue.stream().filter(s -> s.endsWith("r")).forEach(System.out::println);
+        //стоит обратить внимание, что в данном случае фильтр ОСТАВЛЯЕТ те объекты, кот-е оканчиваются на 'r'.
+        
+		thirdQueue.stream().filter(s -> !s.endsWith("r")).forEach(System.out::println);
+        //'!' - отрицание, меняет ситуацию на противоположную. Все объекты, оканчивающиеся на 'r' были удалены из очереди.
+        // Так же следует отметить, что в стримах после фильтра сразу же можно ставить метод forEach.
+		
+		
+		Deque<Integer> stack = new java.util.ArrayDeque<>();
+        stack.push(1);
+        stack.push(2);
+        stack.push(3);
+        while(!stack.isEmpty()){
+            System.out.println(stack.pop());
+        } // мы видим классическую работу deque ('1' вошла первой, вышла последней)
 
+        Deque<Integer> queue = new java.util.ArrayDeque<>();
+        queue.offer(11);
+        queue.offer(22);
+        queue.offer(33);
+        while(!queue.isEmpty()){
+            System.out.println(queue.poll());
+        } // в данном случае из-за использования команд "очереди", числа имеют прямую последовательность FIFO
 
+        //Обратить внимание на использование команд! Для DEQUE добавление - .push, удаление - .pop;
+        //                                           Для QUEUE добавление - .offer, удаление - .poll;
