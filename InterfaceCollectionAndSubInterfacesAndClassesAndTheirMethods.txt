@@ -1,0 +1,64 @@
+- - - Interface SET<E> - - -
+public interface Set<E> extends Collection<E>
+
+	All methods:
+boolean add(E e)
+boolean addAll(Collection<? extends E> c)
+void clear()
+boolean contains(Object o)
+boolean containsAll(Collection<?> c)
+boolean equals(Object o)
+int hashCode()
+boolean isEmpty()
+Iterator<E> iterator()
+boolean remove(Object o)
+boolean removeAll(Collection<?> c)
+boolean retainAll(Collection<?> c)
+int size()
+default Spliterator<E>
+Object[] toArray()
+<T> T[] toArray(T[] a)
+Methods inherited from interface java.util.Collection: parallelStream, removeIf, stream.
+Methods inherited from interface java.lang.Iterable: forEach.
+
+- - - Class HashSet - - -
+All Implemented Interfaces: Serializable, Cloneable, Iterable<E>, Collection<E>, Set<E>.
+
+- - - Class TreeSet - - -
+All Implemented Interfaces: Serializable, Cloneable, Iterable<E>, Collection<E>, NavigableSet<E>, Set<E>, SortedSet<E>.
+
+
+- - - Interface LIST<E> - - -
+public interface List<E> extends Collection<E>
+
+	All methods:
+boolean add(E e)
+void add(int index, E element)
+boolean addAll(Collection<? extends E> c)
+boolean addAll(int index, Collection<? extends E> c)
+void clear()
+boolean contains(Object o)
+boolean containsAll(Collection<?> c)
+boolean equals(Object o)
+E get(int index)
+int hashCode()
+int indexOf(Object o)
+boolean isEmpty()
+Iterator<E> iterator()
+int lastIndexOf(Object o)
+ListIterator<E> listIterator()
+ListIterator<E> listIterator(int index)
+E remove(int index)
+boolean remove(Object o)
+boolean removeAll(Collection<?> c)
+default void replaceAll(UnaryOperator<E> operator)
+boolean retainAll(Collection<?> c)
+E set(int index, E element)
+int size()
+default void sort(Comparator<? super E> c)
+default Spliterator<E> spliterator()
+List<E> subList(int fromIndex, int toIndex)
+Object[] toArray()
+<T> T[] toArray(T[] a)
+Methods inherited from interface java.util.Collection: parallelStream, removeIf, stream.
+Methods inherited from interface java.lang.Iterable: forEach
