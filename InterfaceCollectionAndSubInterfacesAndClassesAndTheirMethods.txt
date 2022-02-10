@@ -62,3 +62,54 @@ Object[] toArray()
 <T> T[] toArray(T[] a)
 Methods inherited from interface java.util.Collection: parallelStream, removeIf, stream.
 Methods inherited from interface java.lang.Iterable: forEach
+
+- - - Interface Queue<E> - - -
+public interface Queue<E> extends Collection<E>
+
+						Summary of Queue methods:
+Insert: 	add(e) - Throws exception		offer(e) - Returns special value
+Remove: 	remove() - Throws exception		poll() - Returns special value
+Examine: 	element() - Throws exception	peek() - Returns special value
+
+Methods inherited from interface java.util.Collection: addAll, clear, contains, containsAll, equals, hashCode, isEmpty, iterator,
+parallelStream, remove, removeAll, removeIf, retainAll, size, spliterator, stream, toArray, toArray.
+Methods inherited from interface java.lang.Iterable: forEach.
+
+- - - Interface Deque<E> - - -
+public interface Deque<E> extends Queue<E>
+
+Summary of Deque methods:
+			|		First element (Head)		|		Last Element (Tail)			|
+			| Throws exception	| Special value	| Throws exception	| Special value	|
+			|																		|
+Insert:		| addFirst(e)		| offerFirst(e)	| addLast(e)		| offerLast(e)	|
+Remove:		| removeFirst(e)	| pollFirst(e)	| removeLast(e)		| pollLast(e)	|
+Examine:	| getFirst()		| peekFirst()	| getLast()			| peekLast(e)	|
+
+This interface extends the Queue interface. When a deque is used as a queue, FIFO (First-In-First-Out) behavior results.
+Elements are added at the end of the deque and removed from the beginning.
+The methods inherited from the Queue interface are precisely equivalent to Deque methods as indicated in the following table:
+
+	Comparison of Queue and Deque methods:
+Queue Method 	| Equivalent Deque Method
+				|
+add(e)			| addLast(e)
+offer(e)		| offerLast(e)
+remove()		| removeFirst()
+poll()			| pollFirst()
+element()		| getFirst()
+peek()			| peekFirst()
+
+Deques can also be used as LIFO (Last-In-First-Out) stacks. This interface should be used in preference to the legacy Stack class.
+When a deque is used as a stack, elements are pushed and popped from the beginning of the deque.
+Stack methods are precisely equivalent to Deque methods as indicated in the table below:
+
+	Comparison of Queue and Deque methods:
+Stack Method 	| Equivalent Deque Method
+				|
+push(e)			| addFirst(e)
+pop(e)			| removeFirst(e)
+peek()			| peekFirst()
+
+
+
