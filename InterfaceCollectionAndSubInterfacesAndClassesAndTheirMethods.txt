@@ -173,3 +173,25 @@ public class QueueExamples{
 
         //Обратить внимание на использование команд! Для DEQUE добавление - .push, удаление - .pop;
         //                                           Для QUEUE добавление - .offer, удаление - .poll;
+		
+		 Queue<String> prior = new java.util.PriorityQueue<>();
+        prior.offer("J");
+        prior.offer("A");
+        prior.offer("V");
+        prior.offer("A");
+        prior.offer("2");
+        while(!prior.isEmpty()){ //строчка означает: пока данная очередь не пуста...
+            System.out.print(prior.poll() + " "); //console: 2 A A J V
+        }
+		
+		Queue<String> secondPrior = new java.util.PriorityQueue<>(Comparator.reverseOrder());
+        //Comparator задает условие приоритета, в данном случае - обратный порядок
+        //! Т.е. изначально приоритет был задан как алфавитный порядок, а затем уже перевернутая версия благодаря параметру.
+        secondPrior.offer("F");
+        secondPrior.offer("A");
+        secondPrior.offer("R");
+        while(!secondPrior.isEmpty()){
+            System.out.print(secondPrior.poll() + " "); //console: R F A
+        }
+		
+		

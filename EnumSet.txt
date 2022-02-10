@@ -1,0 +1,7 @@
+/*
+- - - Class EnumSet<E extends Enum<E>> - - -
+public abstract class EnumSet<E extends Enum<E>> extends AbstractSet<E> implements Cloneable, Serializable
+
+A specialized Set implementation for use with enum types.
+
+	All methods:
