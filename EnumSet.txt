@@ -5,3 +5,28 @@ public abstract class EnumSet<E extends Enum<E>> extends AbstractSet<E> implemen
 A specialized Set implementation for use with enum types.
 
 	All methods:
+*/
+
+piblic enum Day{
+	MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY;
+}
+
+import java.util.EnumSet;
+import static enumSET.Day.*;
+public class DayMain{
+	public static void main(String[] args){
+		//метод of() - позволяет собирать EnumSet из произвольного перечисления
+		EnumSet<Day> freeSet = EnumSet.of(MONDAY, WEDNESDAY, FRIDAY);
+		EnumSet<Day> allDays = EnumSet.allOf(Day.class);
+		
+		EnumSet<Day> weekend = EnumSet.of(SATURDAY, SUNDAY);
+        EnumSet<Day> workDays = EnumSet.complementOf(weekend);
+		// для того, чтобы исключить при помощи .complementOf(), нужно изначально иметь EnamSet из тех элементов,
+        // которые следует исключить. В моём случае EnamSet<Day> weekend
+		
+		EnumSet<Day> workDay2 = EnumSet.copyOf(workDays);
+		EnumSet<Day> empty = EnumSet.noneOf(Day.class);
+		
+		EnumSet<Day> chose = EnumSet.range(WEDNESDAY, FRIDAY);
+		// в указанный диапазон попали перечисления от первого указанного по последний указанный
+		
