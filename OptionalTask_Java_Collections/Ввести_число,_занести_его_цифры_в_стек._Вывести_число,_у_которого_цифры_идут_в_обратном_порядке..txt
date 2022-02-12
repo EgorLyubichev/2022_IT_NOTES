@@ -1,0 +1,29 @@
+// 2.   Ввести число, занести его цифры в стек. Вывести число, у которого цифры идут в обратном порядке.
+
+import java.util.ArrayDeque;
+import java.util.Deque;
+
+public class Main{
+    public static void main (String[] args) {
+        int source = 123456789;
+        String sourceLine = String.valueOf(source);
+        String[] numbers = sourceLine.split("");
+        Deque<String> stack = new ArrayDeque<>();
+        for (int i = 0; i < numbers.length; i++) {
+            stack.push(numbers[i]);
+        }
+        String[]reverseNumbers = new String[numbers.length];
+        int counter = 0;
+        while (!stack.isEmpty()){
+            reverseNumbers[counter++] = stack.pop();
+        }
+        StringBuilder destination = new StringBuilder();
+        for (int i = 0; i < reverseNumbers.length; i++) {
+            destination.append(reverseNumbers[i]);
+        }
+        int destinationNumber = Integer.parseInt(destination.toString());
+        System.out.println(destinationNumber);
+    }
+}
+
+// Console: 987654321

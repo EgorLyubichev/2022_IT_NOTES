@@ -1,0 +1,37 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.*;
+
+public class Main{
+    public static void main (String[] args) throws FileNotFoundException {
+        File source = new File("source.txt");
+        Scanner scanner = new Scanner(source);
+        List<String> lines = new ArrayList<>();
+        while(scanner.hasNextLine()){
+            lines.add(scanner.nextLine());
+        }
+        scanner.close();
+
+        Deque<String> stack = new ArrayDeque<>();
+        for (String line: lines) {
+            stack.push(line);
+        }
+
+        File destination = new File("destination.txt");
+        PrintWriter pw = new PrintWriter(destination);
+        while(!stack.isEmpty()){
+            pw.println(stack.pop());
+        }
+        pw.close();
+    }
+}
+
+// в корневой папке проекта лежит файл source.txt:
+// First line
+// Second line
+// Third line
+// в результате работы программы в корневой папке появится файл destination.txt:
+// Third line
+// Second line
+// First line

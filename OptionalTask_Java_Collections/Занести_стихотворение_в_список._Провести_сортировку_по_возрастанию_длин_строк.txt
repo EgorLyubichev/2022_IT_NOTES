@@ -1,0 +1,41 @@
+// 4.   Занести стихотворение в список. Провести сортировку по возрастанию длин строк.
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.*;
+
+public class Main{
+    public static void main (String[] args) throws FileNotFoundException {
+        File poem = new File("Pushkin.txt");
+        Scanner scanner = new Scanner(poem);
+        ArrayList<String> lines = new ArrayList<>();
+        while(scanner.hasNextLine()){
+            lines.add(scanner.nextLine());
+        }
+        scanner.close();
+
+        Collections.sort(lines, new LineLengthComparator());
+        lines.forEach(System.out::println);
+    }
+}
+
+/*
+В корневом каталоге лежит файл Pushkin.txt:
+На холмах Грузии лежит ночная мгла;
+Шумит Арагва предо мною.
+Мне грустно и легко; печаль моя светла;
+Печаль моя полна тобою,
+Тобой, одной тобой… Унынья моего
+Ничто не мучит, не тревожит,
+И сердце вновь горит и любит — оттого,
+Что не любить оно не может.
+
+Console:
+Печаль моя полна тобою,
+Шумит Арагва предо мною.
+Что не любить оно не может.
+Ничто не мучит, не тревожит,
+Тобой, одной тобой… Унынья моего
+На холмах Грузии лежит ночная мгла;
+И сердце вновь горит и любит — оттого,
+Мне грустно и легко; печаль моя светла;

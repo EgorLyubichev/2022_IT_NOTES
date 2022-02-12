@@ -1,0 +1,64 @@
+/*Чтение из файла при помощи Scanner*/
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+public class Test {
+    public static void main(String[] args) throws FileNotFoundException {
+        File lines = new File("Lines.txt"); // файл Lines.txt лежит при этом в корневой папке проекта
+        Scanner scanner = new Scanner(lines);
+        while(scanner.hasNextLine()){
+            System.out.println(scanner.nextLine());
+        }
+        scanner.close();
+    }
+}
+
+// Если файл лежит не в корневой папке проекта а где-то в другом месте, то нужно указывать полный путь к этому файлу.
+// На разных ОС могут быть разные написания пути к файлу. Потому стоит использовать сепаратор, чтобы файл был найден на разных ОС.
+// Пример, когда файл лежит на рабочем столе, а не в проекте (в данном случае файл лежит на рабочем столе):
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
+public class Test {
+    public static void main(String[] args) throws FileNotFoundException {
+        String separator = File.separator;
+        String path = "c:" + separator + "Users" + separator + "user" + separator + "Desktop"+ separator +"Lines.txt";
+        File lines = new File(path);
+        //File lines = new File("c:\\Users\\user\\Desktop\\Lines.txt");
+        Scanner scanner = new Scanner(lines);
+        while(scanner.hasNextLine()){
+            System.out.println(scanner.nextLine());
+        }
+        scanner.close();
+    }
+}
+
+//Пример с использованием файла data.properties в котором лежит: path = c:\\Users\\user\\Desktop\\Lines.txt
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Properties;
+import java.util.Scanner;
+
+public class Test {
+    public static void main(String[] args) throws IOException {
+        File data = new File("src/data.properties");
+        Properties properties = new Properties();
+        properties.load(new FileReader(data));
+        String source = properties.getProperty("path");
+
+        File lines = new File(source);
+        //File lines = new File("c:\\Users\\user\\Desktop\\Lines.txt");
+        Scanner scanner = new Scanner(lines);
+        while(scanner.hasNextLine()){
+            System.out.println(scanner.nextLine());
+        }
+        scanner.close();
+    }
+}
+
+
+
