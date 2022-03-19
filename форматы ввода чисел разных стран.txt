@@ -1,0 +1,9 @@
+// Для работы с переменными в том или ином ключе, стоит создать объект класса NumberFormat (уже лежит в пакете) и работать:
+
+NumberFormat numberFormatFR = NumberFormat.getInstance(Locale.FRENCH);
+NumberFormat numberFormatUS = NumberFormat.getInstance(Locale.US);
+Double str1 = 34.34;
+String number1 = numberFormatFR.format(str1);
+System.out.println(number1 + " French format"); //console: 34,34
+String number2 = numberFormatUS.format(str1);
+System.out.println(number2 + " US format"); //console: 34.34

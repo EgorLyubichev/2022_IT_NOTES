@@ -1,0 +1,79 @@
+import java.text.NumberFormat;
+import java.util.Locale;
+
+public class Main {
+    public static void main(String[] args) {
+        double a = Math.random();
+        System.out.println(a); // console: 0.17455758709866998 - random number (range: 0.0 - 1.0)
+        int b = (int) Math.random();
+        System.out.println(b); // console: 0
+        double c = Math.random() * 10;
+        System.out.println(c); // console: 2.389731708587476
+
+        int d = (int) Math.random() * 10;
+        System.out.println(d); //console: (always)0 !
+        int e = (int)(Math.random()*10); //важно! сначала * 10, а потом преобразовать в int
+        System.out.println("e = " + e);
+
+        for (int i = 0; i < 10; i++) {
+            int f = (int)(Math.random()* 10);
+            System.out.print(f + " | "); //console: 2 | 6 | 3 | 6 | 9 | 9 | 10 | 4 | 0 | 0 |
+        }
+        System.out.println();
+        for (int i = 0; i < 10; i++) {
+            int f = (int)(Math.random()* 100);
+            System.out.print(f + " | "); //console: 31 | 41 | 59 | 60 | 7 | 99 | 21 | 97 | 33 | 89 |
+        }
+        System.out.println();
+
+        // - - - Способы округления чисел - - -
+
+        double doubleF = 37.456456;
+        String result = String.format("%.3f", doubleF);
+        System.out.println(result); // console: 37,456
+        String result2 = String.format("%.4f", doubleF);
+        System.out.println(result2); // console: 37,4565
+
+        // Сокращенная запись того, что выше:
+        System.out.printf("%.3f", doubleF); // console: 37,456
+        System.out.println();
+
+        // пример вывода нескольких случайных чисел, округленных до 2 знаков после ',':
+        System.out.println("пример вывода нескольких случайных чисел, округленных до 2 знаков после ',':");
+        for (int i = 0; i < 12; i++) {
+            double f = (Math.random() * 100);
+            System.out.printf("%.2f", f);
+            System.out.print(" | ");
+        }
+        System.out.println();
+        for (int i = 0; i < 15; i++) {
+            int random = (int)(Math.random()*5);
+            System.out.print("[" + (i+1) + "]: " + random + " ");
+        }
+        System.out.println();
+        for (int i = 0; i < 15; i++) {
+            int random = (int)(Math.random()*5) + 1;
+            System.out.print("[" + (i+1) + "]: " + random + " ");
+        }
+        System.out.println();
+        for (int i = 0; i < 15; i++) {
+            int random = (int)(Math.round(Math.random()*5));
+            System.out.print("[" + (i+1) + "]: " + random + " ");
+        }
+        System.out.println();
+
+        // округление до целого числа в разные стороны:
+        int numberUp = (int)Math.ceil(45.01);
+        int numberDown = (int)Math.floor(45.99);
+        System.out.println("numberUp = " + numberUp + " | numberDown = " + numberDown);
+
+        // Случайные числа в заданном диапазоне:
+        final int MAX = 100;
+        final int MIN = 10;
+        int range = MAX - MIN;
+        for (int i = 0; i < 12; i++) {
+            int num = (int)(Math.random() * range) + MIN;
+            System.out.print(num + " | ");
+        }
+    }
+}
