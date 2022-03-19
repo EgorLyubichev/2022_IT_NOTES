@@ -1,0 +1,21 @@
+Вкл./Выкл. assert:
+IDE - Run - Edit Configuration - AssertMain (class) - VM options:
+-ea - вкл
+-de - выкл
+
+В командной строке:
+java -enableassertions RunnerMain
+java -ea RunnerMain
+
+java -disableassertions RunnerMain
+java -da RunnerMain
+
+Примеры кодинга:
+
+int length = -1;
+assert(length >= 0); //выдает ошибку без пояснения
+
+//or
+
+int length = -1;
+assert(length >= 0) : "incorrect length " + length; // выдает ошибку с пояснением

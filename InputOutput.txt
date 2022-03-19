@@ -1,0 +1,45 @@
+- - - Запись объектов в файл. - - -
+
+FileOutputStream - этот класс и его объекты предназначены для записи байтов в файл. Т.е. не важно, объект это, картинка, звук - что угодно.
+Этот класс беспокоит только то, что он записывает последовательность байтов в файл. 
+
+ObjectOutputStream - предназначен исключительно для записи объектов в файл. Он более конкретный, более узко специализированный. Но для того, чтобы ему записывать объекты, ему нужен более абстрактный и более приближенный к байтам объект FileOutputStream, т.к. в конечном итоге, звуки, картинки, объекты - всё это последовательность байтов.
+
+Public class WriteObject{
+	public static void main(String[] args){
+		Person person1 = new Person(1, "Bob");
+		Person person2 = new Person(2, "Nick");
+		
+		try{
+			FileOutputStream fos = new FileOutputStream("people.bin"); //people - название файла
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+		} catch(IOException e){
+			e.printStackTrace();
+		}
+	}
+}
+
+Объект ObjectOutputStream принимает объекты, преобразовывает их в байты. А затем уже объект класса FileOutputStream эти байты записывает в файл.
+
+Запись объектов происходит при помощи метода writeObject. Т.е. в блок try следует дописать:
+	oos.writeObject(person1);
+	oos.writeObject(person2);
+	oos.close(); // не забыть закрыть поток
+	
+Нужно помнить, что нужно не забыть добавить к классу Person "implements Serializable", иначе не пойдёт.
+
+- - - Чтение объектов из файла - - -
+
+public class ReadObject{
+	public static void main(String[] args){
+		try{
+			FileInputStream fis = new FileInputStream("people.bin");
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			
+			
+		} catch(IOException e){
+			e.printStackTrace();
+		}
+		
+	}
+}

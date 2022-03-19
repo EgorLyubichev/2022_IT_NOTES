@@ -1,0 +1,20 @@
+	Unchecked exceptions (Runtime exceptions):
+ArithmeticException
+ArrayIndexOutOfBoundsException
+ArrayStoreException
+ClassCastException - когда производится недопустимое преобразование типов
+ConcurrentModificationException
+IllegalArgumentException
+IllegalMonitorStateException
+IllegalStateException
+IllegalThreadStateException
+IndexOutOfBoundsException
+NegativeArraySizeException
+NullPointerException
+NumberFormatException
+StringIndexOutOfBoundsException
+MissingResourceException
+EnumConstantNotPresentException
+UnsupportedOperationException
+
+	Checked Exception (Compile time exception).
