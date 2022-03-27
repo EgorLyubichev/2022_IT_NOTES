@@ -1,0 +1,79 @@
+import java.util.ArrayList;
+import java.util.Iterator;
+
+public class Test {
+    public static void main(String[] args) {
+        String abc = "Abcdefghijklmno";
+        String one = "One";
+        String two = "Two";
+        String three = "Three";
+
+        ArrayList<String> strList = new ArrayList<>();
+        strList.add(abc);
+        strList.add(one);
+        strList.add(two);
+        strList.add(three);
+
+        Iterator<String> iterator = strList.iterator();
+        while (iterator.hasNext()) {
+            System.out.println("From iterator: " + iterator.next());
+        }
+        abc.charAt(3); // Console: d - charAt()  возвращает один символ по индексу.
+
+// compareTo() сравнивает два объекта в лексикографическом виде, возвращает значение int.
+// Сравнивает попарно char(ы) разных строк. Выводит числовую разницу значения char(ов).
+        String kuzia = "Kuzia";
+        String kuzid = "Kuzid";
+        System.out.println(kuzia.compareTo(kuzid));
+// Console: -3 - т.е. если обе строки равны между собой, то compareTo() вернет '0'.
+
+        abc.concat(kuzia); // Console: AbcdefghijklmnoKuzia
+        // concat() складывает две строки вместе.
+
+        StringBuilder stringBuilder = new StringBuilder("I am stringBuilder");
+        kuzia.contentEquals(stringBuilder); // метод, позволяющий сравнивать String со StringBuilder или StringBuffer.
+        // return - boolean (true or false)
+
+        char[] name = {'e', 'g', 'o', 'r'};
+        String string = String.copyValueOf(name);
+        System.out.println(string); // Console: egor - преобразует массив чаров в строку.
+
+// Методы: contains(), endWith(), startWith() - методы, проверяющие, содержится ли искомый символ или слово (или даже строка)
+// в исходной строке. Значение boolean.
+        System.out.println(string.startsWith("e")); //Console: true
+        System.out.println(string.contains("go")); //Console: true
+        System.out.println(string.endsWith("gor")); //Console: true
+        System.out.println(string.contains("egor")); //Console: true
+
+        String stringUp = "EGOR";
+        System.out.println(string.equalsIgnoreCase(stringUp)); //Console: true
+// При сравнении двух строк без учета регистров.
+
+        char[] charArray = new char[100];
+        abc.getChars(0, 6, charArray, 0);
+        System.out.println(charArray);
+        // преобразует строку в массив символов.
+// Console: Abcdef
+
+        System.out.println(abc.hashCode()); //Console: -510372792
+
+        System.out.println(abc.indexOf('f')); // Console: 5 - возвращает первый индекс встречи данного символа
+        System.out.println(abc.lastIndexOf('A')); //Console: 0 - возвращает последний индекс встречи данного символа
+
+        String aWc = abc.replace('b', 'W');
+        System.out.println(aWc);
+
+        String hello = "Hello World!";
+        String heLLo = hello.replace('l', '/');
+        System.out.println(heLLo);
+        // replace() - заменяет один символ на другой во всех случаях в строке.
+
+        //trim() - обрезает пробелы с двух сторон строки (в начале и в конце)
+
+        String subAbc = abc.substring(0,3);//обрезает строку по выбранному диапазону символов
+        System.out.println(subAbc); //Console: Abc
+        String subAbc2 = abc.substring(4); // обрезает начало строки на столько-то символов.
+        System.out.println(subAbc2); //Console: efghijklmno
+    }
+}
+
