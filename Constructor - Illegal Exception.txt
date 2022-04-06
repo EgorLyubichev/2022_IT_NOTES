@@ -1,0 +1,6 @@
+public Port(int count) {
+        if(!(count > 0 && count < 101)){
+            throw  new IllegalArgumentException("Only from 1 to 100");
+        }
+        this.ships = new Ship[count];
+    }

@@ -1,0 +1,21 @@
+Arrays.sort() - для сортировки массивов.
+Arrays.toString() - для представления массива в виде строки.
+Arrays.copyOf() - для копирования массива (фрагмента массива). При использовании в случае двумерных и более массивов - копирование поверхностное.
+Arrays.equals() - при сравнении массивов. Обычный equals будет сравнивать ссылки, а не массивы.
+
+public class Test {
+    public static void main(String[] args) {
+        int[][] array1 = {{1,2,3},{2,3,4},{3,4,5}};
+        int[][] array2 = {{1,2,3},{2,3,4},{3,4,5}};
+
+        System.out.println(Arrays.deepToString(array1));
+        System.out.println(Arrays.equals(array1, array2));
+        System.out.println(Arrays.deepEquals(array1, array2));
+    }
+}
+
+Console:
+[[1, 2, 3], [2, 3, 4], [3, 4, 5]]
+false
+true
+Arrays.deepToString и Arrays.deepEquals - методы, работающие для двумерных (и более) массивов.

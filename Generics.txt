@@ -1,0 +1,25 @@
+- - - Generics - - -
+
+/*Here is a small excerpt from the definitions of the interfaces List and Iterator in package java.util:*/
+public interface List<E>{
+	void add(E x);
+	Iterator<E> iterator();
+}
+
+public interface Iterator<E>{
+	E next();
+	boolean hasNext();
+}
+/*
+Those are the declarations of the formal type parameters of the interfaces List and Iterator.
+Type parameters can be used throughout the generic declaration, pretty much where you would use ordinary types.
+You might imagine that List<Integer> stands for a version of List where E has been uniformly replaced by Integer:
+*/
+public interface IntegerList{
+	void add(Integer x);
+	Iterator<Integer> iterator();
+}
+
+
+
+

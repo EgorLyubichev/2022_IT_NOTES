@@ -1,0 +1,9 @@
+@Override
+    public String toString() {
+        String res1 = "Ship{" +
+                "deck1=" + deck1 +
+                ", deck2=" + deck2 +
+                '}';
+        String res2 = "Ship{deck=" + deck1 + '}';
+        return deck2 == null ? res2 : res1;
+    }
