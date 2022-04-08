@@ -1,0 +1,51 @@
+	Приминение дженериков в коллекции позволяет ограничить тип данных, которые могут использоваться в коллекциях.
+Это ограничение одновременно позволяет расширить возможности обработки именно этого типа данных.
+
+Пример:
+Пусть class Student extends Person.
+
+List<Student> students = new ArrayList<>();
+
+Этот list не может в себя принимать какие-либо иные объекты кроме Student. И даже объект класса Person мы не можем добавить в данный список.
+
+
+List<Person> people = new ArrayList<>();
+    people.add(new Person());
+    people.add(new Person());
+    people.add(new Student());
+    people.add(new Student());
+//Если вызвать метод get(), то можно видеть, что ссылка ведёт только на класс Person.
+//Соответственно, при извлечении объектов класса Student, ссылка класса Person примет объект класса Student.
+        Student student = people.get(2); //ошибка компиляции
+        Person person = people.get(2); //ошибка не возникает, но (по принципу полиморфизма) такому объекту не будут доступны возможности класса Student.
+
+public class Main {
+    public static void main(String[] args) {
+        List<Person> list = new ArrayList<>();
+        list.add(new Person());
+        action(list);
+// Как видим, всё работает как положено.
+// Но мы знаем, что в этот список мы можем добавить объект класса Student (extends Person).
+        list.add(new Student());
+        action(list); // всё работает.
+// Но!
+        List<Student> students = new ArrayList<>();
+        action(students); // ошибка, этот метод не принимает список студентов
+// Но если переписать параметр метода с wildcard, то метод сможет работать и с подклассами суперкласса:
+        action2(students);
+
+    }
+    public static void action(List<Person> list){
+    }
+    static void action2(List<? extends Person> list){
+/*При такой параметризации есть свои нюансы. Например, удаление мы можем сделать без каких-то проблем.
+* Но добавление объекта здесь невозможно. Связано это с тем, что при такой параметризации этот метод action
+* может встретиться со списком <Student>, а в теле метода action() будет прописано, например, add(new Person)*/
+        list.remove(0);
+        list.add(new Person()); // ошибка компиляции
+        list.add(new Student()); // тоже ошибка
+        // стримы можно создавать, но их параметризация должна точно совпадать с параметризацией метода:
+        Stream<? extends Person> stream = list.stream();
+    }
+}
+
