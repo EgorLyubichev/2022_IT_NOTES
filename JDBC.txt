@@ -1,0 +1,66 @@
+- - - SQL (Structured Query Language) - - -
+SQL - язык программирования для работы с базами данных.
+
+* DDL (Data Definition Language) - CREATE, ALTER, DROP
+* DML (Data Manipulation Language) - SELECT, INSERT, UPDATE, DELETE
+* DCL (Data Control Language) - GRANT, REVOKE
+* TCL (Transaction Control Language) - COMMIT, ROLLBACK
+
+
+-------------------------------------------
+С урока:
+
+package by.lev;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+public class Main {
+    public static void main(String[] args) throws SQLException {
+        String url = "jdbc:mysql://127.0.0.1:3307/app";
+        String username = "root";
+        String password = "";
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        try(Connection conn = DriverManager.getConnection(url, username, password)){
+            System.out.println("Connection to Store DB successful!");
+            //PreparedStatement stmt = conn.prepareStatement("UPDATE users SET login=?, password=? WHERE id=?");
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM user");
+           //PreparedStatement stmt = conn.prepareStatement("INSERT INTO user (login, password) VALUES (?,?)");
+            //PreparedStatement stmt = conn.prepareStatement("DELETE FROM users WHERE login=? AND password=?");
+//            stmt.setString(1, "Bill");
+//            stmt.setString(2, "232555");
+//            stmt.setString(3, "3");
+            stmt.execute();
+//            String name
+//            while(rs.next()){
+//                name = rs.getString("password");
+//                System.out.println("----------------");
+//                System.out.println(name + "\n");
+//            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+
+    }
+
+//    public static void getConnection(){
+//        String url = "jdbc:mysql://127.0.0.1:3307/app";
+//        String username = "root";
+//        String password = "";
+//
+//        try {
+//            Class.forName("com.mysql.jdbc.Driver");
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        try(Connection conn = DriverManager.getConnection(url, username, password)){
+//            System.out.println("Connection to Store DB successful!");
+//
+//    }
+}

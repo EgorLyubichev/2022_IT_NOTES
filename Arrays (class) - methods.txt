@@ -19,3 +19,30 @@ Console:
 false
 true
 Arrays.deepToString и Arrays.deepEquals - методы, работающие для двумерных (и более) массивов.
+
+Arrays.fill() - метод для заполнения массива определенным одним значением.
+public class Main {
+    public static void main(String[] args) {
+
+        int[] a = {1,2,3,4,5};
+        Arrays.fill(a, 12);
+        System.out.println(Arrays.toString(a));
+
+    }
+}
+Console: [12, 12, 12, 12, 12]
+
+- - - BinarySearch - - -
+Не стоит забывать про метод BinarySearch при поиске элемента, т.к. это более быстрый и легкий способ поиска, нежели искать через for, т.к. неизвестно, насколько далеко может лежать искомый объект.
+
+public class Main {
+    public static void main(String[] args) {
+
+        int[] a = {1, 2, 3, 7, 23, 76, 42, 66, 123, 76, 456, 2, 6};
+        Arrays.sort(a);
+        int index = Arrays.binarySearch(a, 66);
+        System.out.println("Index of key --> " + index);
+        System.out.println("Key --> " + a[index]);
+        
+    }
+}

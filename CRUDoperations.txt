@@ -1,0 +1,9 @@
+public interface Repository<T> {
+    boolean create(T user);
+    T read (String login, String password);
+    // а можно перегрузить метод и получать юзера по его id:
+    T read (int id);
+    boolean update (T oldUser, T newUser);
+    boolean delete (T user);
+    List<T> readAll();
+}

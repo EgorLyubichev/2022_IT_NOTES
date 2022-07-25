@@ -77,3 +77,28 @@ public class Test {
     }
 }
 
+// Пример работы метода substring():
+public class Main {
+    public static void main(String[] args) {
+        String abc = "abcdefghijklmnopqrstuvwzyx";
+        abc = abc.substring(8);
+        System.out.println(abc);
+    }
+}
+
+//метод concat(String str):
+//этот метод возвращает новый объект состоящий из суммы строки, на которой вызван + аргумент параметра.
+public class Main {
+    public static void main(String[] args) {
+        String one = "ONE";
+        String oneTwo = one.concat("-TWO");
+        System.out.println(oneTwo);
+        String three = "-THREE";
+        String oneTwoThree = oneTwo.concat(three);
+        System.out.println(oneTwoThree);
+	}
+}
+//Console:
+//ONE-TWO
+//ONE-TWO-THREE
+

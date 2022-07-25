@@ -1,0 +1,265 @@
+- - - Stream API - - -
+Появилась эта штука в Java8.
+
+https://habr.com/ru/company/luxoft/blog/270383/
+
+Stream API это новый способ работать со структурами данных в функциональном стиле. Чаще всего с помощью stream в Java 8 работают с коллекциями, но на самом деле этот механизм может использоваться для самых различных данных.
+
+- - - Способы создания стримов.
+
+1. Создание стрима из коллекции: collection.stream()
+	Collection<String> collection = Arrays.asList("a1", "a2", "a3");
+    Stream<String> streamFromCollection = collection.stream();
+		
+2. Создание стрима из значений: Stream().of(значение1, ... значениеN)
+	Stream<String> streamFromValues = Stream.of("a1", "a2", "a3");
+	
+3. Создание стрима из массива: Arrays.stream(массив)
+	String[] array = {"a1","a2","a3"};                     
+	Stream<String> streamFromArrays = Arrays.stream(array);
+	
+4. Создание стрима из файла (каждая строка в файле будет отдельным элементом в стриме): Files.lines(путь_к_файлу)
+    Stream<String> streamFromFiles = Files.lines(Paths.get("file.txt"));
+	
+5. Создание стрима из строки: "строка".chars()
+	IntStream streamFromString = "123".chars();
+	
+6.  С помощью Stream.builder: Stream.builder().add(...)....build()
+	Stream.builder().add("a1").add("a2").add("a3").build();
+	
+7. Создание параллельного стрима: collection.parallelStream()
+	Stream<String> stream = collection.parallelStream();
+	
+8. Создание бесконечных стрима с помощью Stream.iterate: Stream.iterate(начальное_условие, выражение_генерации)
+	Stream<Integer> streamFromIterate = Stream.iterate(1, n -> n + 1);
+	
+9. Создание бесконечных стрима с помощью Stream.generate: Stream.generate(выражение_генерации)
+	Stream<String> streamFromGenerate = Stream.generate(() -> "a1");
+	
+
+- - - Методы работы со стримами.
+Методы бывают:
+1) Конвейрные - возвращают другой stream, т.е. работают как builder.
+2) Терминальные - возвращают другой объект, такой как коллекция, примитивы, объекты, Optional и др.
+
+Краткое описание конвейрных методов работы со стримами.
+- filter
+	Отфильтровывает записи, возвращает только записи, соответствующие условию:
+	collection.stream().filter(«a1»::equals).count()
+	
+	Stream.of(120, 410, 85, 32, 314, 12).filter(x -> x > 100).forEach(System.out::println); // 120, 410, 314
+	
+- skip
+	Позволяет пропустить N первых элементов:
+	collection.stream().skip(collection.size()-1).findFirst().orElse("1");
+	
+- distinct
+	Возвращает стрим без дубликатов (для метода equals):
+	collection.stream().distinct().collect(Collectors.toList());
+	
+- map
+	Преобразует каждый элемент стрима:
+	collection.stream().map((s) -> + "_1").collect(Collectors.toList());
+	
+- peek
+	Возвращает тот же стрим, но применяет функцию к каждому элементу стрима:
+	collection.stream().map(String::toUpperCase).peek((e) -> System.out.print(e + " | ")).collect(Collectors.toList());
+	
+- limit
+	Позволяет ограничить выборку определенным количеством первых элементов:
+	collection.stream().limit(2).collect(Collectors.toList());
+	
+- takeWhile
+	Появился в Java 9. Возвращает элементы до тех пор, пока они удовлетворяют условию, то есть функция-предикат возвращает true. Это как limit, только не с числом, а с условием.
+	    Stream.of(1, 2, 3, 4, 2, 5)
+			.takeWhile(x -> x < 3)
+			.forEach(System.out::println); // 1, 2
+
+	
+- sorted
+	Позволяет сортировать значения либо в натуральном порядке, либо задавая Comparator:
+		collection.stream()
+			.sorted()
+			.collect(Collectors.toList());
+	
+- mapToInt, mapToDouble, mapToLong
+	Аналог map, но возвращает числовой стрим (т.е. стрим из числовых примитивов):
+	collection.stream().mapToInt((s) -> Integer.parseInt(s)).toArray();
+	
+(!)- flatMap, flatMapToInt, flatMapToDouble, flatMapToLong
+	Похоже на map, но может создавать из одного элемента несколько:
+	collection.stream().flatMap((p) -> Arrays.asList(p.split(",")).stream()).toArray(String[]::new)
+	
+Краткое описание терминальных методов работы со стримами.
+- findFirst
+	Возвращает первый элемент из стрима (возвращает Optional):
+	collection.stream().findFirst().orElse("1");
+	
+- findAny
+	Возвращает любой подходящий элемент из стрима (возвращает Optional):
+	collection.stream().findAny().orElse("1");
+	
+- collect
+	Представление результатов в виде коллекций и др. структур данных:
+	collection.stream().filter((s) -> s.contains(«1»)).collect(Collectors.toList());
+	
+- count
+	Возвращает количество элементов в стриме:
+	collection.stream().filter("one"::equals).count();
+	
+- anyMatch
+	Возвращает true, если условие выполняется хотя бы для одного из элементов:
+	collection.stream().anyMatch("one"::equals);
+	
+- noneMatch
+	Возвращает true, если условие не выполняется ни для одного из элементов:
+	collection.stream().noneMatch(«abra-kadabra»::equals);
+	
+- allMatch
+	Возвращает true, если условие выполняется для всех элементов:
+	collection.stream().allMatch((s) -> s.contains(«1»));
+	
+- min
+	Возвращает минимальный элемент; в условие указывается компаратор:
+	collection.stream().min(String::compareTo).get();
+	
+- max
+	Возвращает максимальный элемент; в условие указывается компаратор:
+	collection.stream().max(String::compareTo).get();
+	
+- forEach
+	Применяет функцию к каждому объекту стрима, порядок при параллельном выполнении не гарантируется:
+	set.stream().forEach((p) -> p.append("_1"));
+	
+- forEachOrdered
+	Применяет функцию к каждому объекту стрима, сохранение порядка элементов гарантирует:
+	list.stream().forEachOrdered((p) -> p.append("_new"));
+	
+- toArray
+	Возвращает массив значений стрима:
+	collection.stream().map(String::toUpperCase).toArray(String[]::new);
+	
+- reduce
+	Метод reduce сохраняет результат и затем опять же применяет к этому результату и следующему элементу в наборе операцию. Фактически, мы получаем результат, который будет равен: n1 op n2 op n3 op n4 op n5 op n6, где op - это операция, а n1, n2, ... - элементы из потока.
+	Может возвращать объекты: Optional<T>, BinaryOperator<T>, 
+	(при помощи метода .get() можно получить чистый результат, хранящийся в объекте)
+	Коротко: reduce позволяет выполнять агрегатные функции над всей коллекцией и возвращать один результат:
+	collection.stream().reduce((s1, s2) -> s1 + s2).orElse(0);
+	
+	Stream<Integer> streamInteger = Stream.of(1, 2, 3, 4, 5);
+    Optional<Integer> z = streamInteger.reduce((a, b) -> a + b);
+    System.out.println(z.get()); //result: 15
+
+/*Обратите внимание(!) методы findFirst, findAny, anyMatch это short-circuiting методы, то есть обход стримов организуется таким образом чтобы найти подходящий элемент максимально быстро, а не обходить весь изначальный стрим.*/
+
+Краткое описание доп. методов у числовых стримов.
+- range
+	Создает последовательность простых чисел от указанного до указанного (второе указанное в диапазон не входит).
+	IntStream numbers = IntStream.range(6, 10);
+	numbers.forEach(System.out::println);
+	res:
+	6
+	7
+	8
+	9
+	
+- IntStream.rangeClosed(int startInclusive, int endInclusive),
+- LongStream.rangeClosed(long startInclusive, long endInclusive):
+Создаёт стрим из числового промежутка [start..end], то есть от start (включительно) по end (включительно).
+    IntStream.rangeClosed(0, 5)
+        .forEach(System.out::println);
+    // 0, 1, 2, 3, 4, 5
+     
+    LongStream.range(-8L, -5L)
+        .forEach(System.out::println);
+    // -8, -7, -6, -5
+	
+- sum
+	Возвращает сумму всех чисел:
+	collection.stream().mapToInt((s) -> Integer.parseInt(s)).sum();
+	
+- average
+	Возвращает среднее арифметическое всех чисел:
+	collection.stream().mapToInt((s) -> Integer.parseInt(s)).average();
+	
+- mapToObj
+	Преобразует числовой стрим обратно в объектный:
+	intStream.mapToObj((id) -> new Key(id)).toArray();
+	
+Несколько других полезных методов.
+- isParallel
+	Узнать является ли стрим параллельным.
+- parallel
+	Вернуть параллельный стрим, если стрим уже параллельный, то может вернуть самого себя.
+- sequential
+	Вернуть последовательный стрим, если стрим уже последовательный, то может вернуть самого себя.
+	
+	С помощью, методов parallel и sequential можно определять какие операции могут быть параллельными, а какие только последовательными. Так же из любого последовательного стрима можно сделать параллельный и наоборот, то есть:
+		collection.stream().
+		peek(...). // операция последовательна
+		parallel().
+		map(...). // операция может выполняться параллельно,
+		sequential().
+		reduce(...) // операция снова последовательна
+		
+Обратите внимание, что методы findFirst и findAny возвращают новый тип Optional, появившийся в Java 8, для того чтобы избежать NullPointerException. Метод filter удобно использовать для выборки лишь определенного множества значений, а метод skip позволяет пропускать определенное количество элементов.
+
+
+- - - Ещё операторы для стримов.
+
+- empty():
+Стрим, как и коллекция, может быть пустым, а значит всем последующем операторам нечего будет обрабатывать.
+    Stream.empty().forEach(System.out::println); // Вывода нет
+
+- of(T value)	of(T... values):
+Стрим для одного или нескольких перечисленных элементов. Очень часто вижу, что используют такую конструкцию:
+    Arrays.asList(1, 2, 3).stream().forEach(System.out::println);
+однако она излишня. Вот так проще:
+	    Stream.of(1, 2, 3).forEach(System.out::println);
+		
+- ofNullable(T t):
+Появился в Java 9. Возвращает пустой стрим, если в качестве аргумента передан null, в противном случае, возвращает стрим из одного элемента.
+    String str = Math.random() > 0.5 ? "I'm feeling lucky" : null;
+    Stream.ofNullable(str).forEach(System.out::println);
+
+- generate(Supplier s):
+Возвращает стрим с бесконечной последовательностью элементов, генерируемых функцией Supplier s.
+    Stream.generate(() -> 6).limit(6).forEach(System.out::println); // 6, 6, 6, 6, 6, 6
+Поскольку стрим бесконечный, нужно его ограничивать или осторожно использовать, дабы не попасть в бесконечный цикл.
+
+- iterate(T seed, UnaryOperator f):
+Возвращает бесконечный стрим с элементами, которые образуются в результате последовательного применения функции f к итерируемому значению. Первым элементом будет seed, затем f(seed), затем f(f(seed)) и так далее.
+    Stream.iterate(2, x -> x + 6).limit(6).forEach(System.out::println); // 2, 8, 14, 20, 26, 32
+	
+	Stream.iterate(1, x -> x * 2).limit(6).forEach(System.out::println); // 1, 2, ..., 32
+
+- iterate(T seed, Predicate hasNext, UnaryOperator f):
+Появился в Java 9. Всё то же самое, только добавляется ещё один аргумент hasNext: если он возвращает false, то стрим завершается. Это очень похоже на цикл for:
+    for (i = seed; hasNext(i); i = f(i)) {
+    }
+Таким образом, с помощью iterate теперь можно создать конечный стрим.
+    Stream.iterate(2, x -> x < 25, x -> x + 6).forEach(System.out::println); // 2, 8, 14, 20
+
+- concat(Stream a, Stream b):
+Объединяет два стрима так, что вначале идут элементы стрима A, а по его окончанию последуют элементы стрима B.
+    Stream.concat(
+            Stream.of(1, 2, 3),
+            Stream.of(4, 5, 6))
+        .forEach(System.out::println); // 1, 2, 3, 4, 5, 6
+	
+- builder():
+Создаёт мутабельный объект для добавления элементов в стрим без использования какого-либо контейнера для этого.
+    Stream.Builder<Integer> streamBuider = Stream.<Integer>builder()
+            .add(0)
+            .add(1);
+    for (int i = 2; i <= 8; i += 2) {
+        streamBuider.accept(i);
+    }
+    streamBuider
+        .add(9)
+        .add(10)
+        .build()
+        .forEach(System.out::println);
+    // 0, 1, 2, 4, 6, 8, 9, 10
+
+

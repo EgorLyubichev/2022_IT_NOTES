@@ -43,3 +43,78 @@ public class ReadObject{
 		
 	}
 }
+
+
+______________________________________________________________________________________________________________
+
+Примеры с урока Владимира Ерёменко:
+
+package by.lev;
+
+import java.io.*;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+
+//        String text = "Hello World";
+//        try(FileOutputStream fos = new FileOutputStream("C://SomeDir//notes.txt")){
+//          byte[] buffer = text.getBytes();
+//          fos.write(buffer, 0, buffer.length);
+//        }
+//        catch(IOException ex){
+//            System.out.println(ex.getMessage());
+//        }
+//        System.out.println("The file has been written");
+
+//        String text = "Hello World";
+//        try(FileInputStream fin = new FileInputStream("src/files/file.txt")){
+//            System.err.printf("File size: %d bytes \n", fin.available());
+//            int i = -1;
+//            while((i = fin.read()) != -1){
+//                System.err.print((char) i);
+//            }
+//
+//        }
+//        catch(IOException ex){
+//            System.err.println(ex.getMessage());
+//        }
+
+//        try{
+//            InputStreamReader inputStreamReader = new InputStreamReader(System.in);
+//            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+//            System.out.println("Enter... ");
+//            String data = bufferedReader.readLine();
+//            System.out.println("... " + data);
+//
+//        }catch (IOException e){
+//            System.out.println(e.getMessage());
+//        }
+
+
+//        try(BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+//        BufferedWriter bw = new BufferedWriter(new FileWriter("src/files/file.txt"))){
+//            System.out.println(" Enter ... ");
+//            String text;
+//            while (!(text=br.readLine()).equals("ESC")){
+//                bw.write(text + "\n");
+//                bw.flush();
+//            }
+//        }
+//        catch (IOException e){
+//            System.out.println(e.getMessage());
+//        }
+
+        try{
+            Scanner scan = new Scanner(System.in);
+            System.out.println("Enter first number...");
+            int num1 = scan.nextInt();
+            System.out.println("Enter second number...");
+            int num2 = scan.nextInt();
+            System.out.println("Sum is :" + (num1+num2));
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+}

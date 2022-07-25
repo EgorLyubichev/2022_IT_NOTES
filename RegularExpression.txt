@@ -1,0 +1,229 @@
+/*Example from the lesson Vladimir Eremenko*/
+public class Main {
+    public static void main(String[] args) {
+        
+        String input = "+375(29)535-09-66ABC";
+        Pattern pattern = Pattern.compile("(\\+*)(\\d{3})(\\()(\\d{2})" +
+                "(\\))(\\d{3})(\\-)(\\d{2})(\\-)(\\d{2})([A-C]{3})");
+        Matcher matcher = pattern.matcher(input);
+        boolean found = matcher.find();
+        String group = matcher.group();
+        if(found) {
+            System.out.println("Найдено : " + group);
+        } else {
+            System.out.println("Не найдено");
+        }
+    }
+}
+
+Регулярные выражения используются в случае, если необходимо выполнить проверку текста в строке на соответствие определенному шаблону.
+Например, в тексте необходимо найти числа, в том числе отрицательные, то есть последовательность цифр, которые могут начинаться со знака минус. Регулярное выражение, описывающее такое сочетание знаков, можно записать несколькими способами:
+	-?[0123456789]+
+	-?[0-9]+
+	-?\\d+
+Все три сочетания начинаются с сочетания -?. Знак вопроса означает, что стоящий перед ним символ может встретиться один раз или ни разу. Последовательность знаков в квадратных скобках означает, что это может быть любой из перечисленных знаков. Знак + после скобок означает, что такой знак должен встречаться один или более раз.
+
+	Метод matches():
+В простейшем случае, можно воспользоваться встроенным в класс String методом matches().
+	public class Main {
+    public static void main(String[] args) {
+        System.out.println("345543".matches("-?[0-9]+")); //true
+        System.out.println("657657".matches("-?\\d+")); //true
+        System.out.println("876543".matches("-?[0123456789]+")); //true
+    }
+}
+Метод matches() получает на вход регулярное выражение и проверяет соответствие всей строки целиком этому выражению. Результатом будет логическое значение истина или ложь.
+
+Ещё два метода, использующие регулярные выражения, - replaceFirst и replaceAll. Эти методы позволяют выполнить поиск и замену в строке.
+public class Main {
+    public static void main(String[] args) {
+        String line = "Пыль по полю летит";
+        System.out.println(line.replaceAll(" ", "-")); //Console: Пыль-по-полю-летит
+        System.out.println(line); //Console: Пыль по полю летит
+    }
+}
+(!) Стоит обратить внимание, что объект line не изменился. Он остался прежним.
+
+public class Main {
+    public static void main(String[] args) {
+        String line = "+375293382047";
+        boolean check = line.matches("\\+\\d{12}");
+        if (check == true){
+            System.out.println(line.replaceAll("\\+\\d{12}", "+375*********")); //Console: +375*********
+        }
+        System.out.println(line.replaceAll("\\d", "*")); //Console: +************
+		System.out.println(line.replaceAll("\\+375\\d{7}+", "+375*******")); // Console: +375*******47
+    }
+}
+- - - Pattern & Matcher - - -
+
+Класс Pattern служит для хранения регулярного выражения.
+Класс Matcher - для выполнения операций поиска и сравнения.
+Для их использования следует сначала задать регулярное выражение и создать объект Pattern.
+
+Например: Pattern p = Pattern.compile("regex");
+
+Объект создается статическим методом compile, получающим на вход регулярное выражение. Затем следует создать объект класса Matcher, указав строку, с которой будут выполняться все последующие операции поиска:
+
+	Matcher m = p.matcher("Здесь указывается текст, в котором будет производиться поиск");
+	
+После этого можно выполнять различные операции с данной строкой и регулярным выражением.
+Одна из наиболее часто используемых операций - поиск. Выполняется с помощью метода find():
+
+	m.find()
+	
+Метод find() возвращает boolean значение. При повторном вызове данного метода он продолжает поиск и возвращает истину, если найдено еще одно соответствие.
+
+public class Main {
+public static void main(String[] args) {
+    Pattern pattern = Pattern.compile("5");
+        Matcher matcher = pattern.matcher("65456545");
+        for (int i = 0; i < 5; i++) {
+            System.out.println(matcher.find());
+        }
+    }
+}
+Console:
+true
+true
+true
+true
+false
+
+Местоположение найденного совпадения можно найти с помощью методов start() и end(). Они возвращают позиции начала соответствия и конца:
+
+public class Main {
+    public static void main(String[] args) {
+        Pattern pattern = Pattern.compile("_+5_+");
+        Matcher matcher = pattern.matcher("5____5__456_5______45");
+        while (matcher.find()){
+            System.out.println(matcher.start() + " | " + matcher.end());
+        }
+    }
+}
+Console:
+1 | 8
+11 | 19
+Т.е. метод start даёт первую позицию, с которой искомое выражение начинается, а метод end дает последующую позицию строки, которая не соответствует данному выражению.
+
+Регулярным выражениям могут соответствовать разные строки. Для того, чтобы узнать, как выглядит очередная найденная методом find строка, можно использовать метод matcher.group()
+
+public class Main {
+    public static void main(String[] args) {
+        Pattern pattern = Pattern.compile("_+5{0,}_+");
+        Matcher matcher = pattern.matcher("5____5__43___356_5555______45");
+        while (matcher.find()){
+            System.out.println(matcher.group());
+        }
+    }
+}
+Console:
+____5__
+___
+_5555______
+
+Если все операции с первой строкой закончены, и нужно работать со второй по такому же шаблону, то не нужно создавать новый объект класса Matcher. Можно воспользоваться методом matcher.reset().
+
+public class Main {
+    public static void main(String[] args) {
+        Pattern pattern = Pattern.compile("_+5{0,}_+");
+        Matcher matcher = pattern.matcher("5____5__43___356_5555______45");
+        while (matcher.find()){
+            System.out.println("First line: " + matcher.group());
+        }
+        matcher.reset("876876___876876");
+        while (matcher.find()){
+            System.out.println("Second line: " + matcher.group());
+        }
+    }
+}
+Console:
+First line: ____5__
+First line: ___
+First line: _5555______
+Second line: ___
+
+Метод lookingAt() - ищет соответсвие только в самом начале строки, с её первого знака. Обратить внимание, что в случае, когда этот метод отрабатывает, а нам нужно найти последующие соответствия, то метод lookingAt как бы переступает через своё найденное выражение. Смотреть разницу в следующих примерах:
+
+public class Main {
+    public static void main(String[] args) {
+        Pattern pattern = Pattern.compile("_+5{0,}_+");
+        Matcher matcher = pattern.matcher("5____5__43___356_5555______45");
+        System.out.println(matcher.lookingAt());
+        while (matcher.find()){
+            System.out.println("First line: " + matcher.group());
+        }
+        matcher.reset("_5_876876___876876");
+        System.out.println(matcher.lookingAt() + ": " + matcher.group());
+        while (matcher.find()){
+            System.out.println("Second line: " + matcher.group());
+        }
+    }
+}
+Console:
+false
+First line: ____5__
+First line: ___
+First line: _5555______
+true: _5_
+Second line: ___
+
+public class Main {
+    public static void main(String[] args) {
+        Pattern pattern = Pattern.compile("_+5{0,}_+");
+        Matcher matcher = pattern.matcher("5____5__43___356_5555______45");
+        System.out.println(matcher.lookingAt());
+        while (matcher.find()){
+            System.out.println("First line: " + matcher.group());
+        }
+        matcher.reset("_5_876876___876876");
+        //System.out.println(matcher.lookingAt() + ": " + matcher.group());
+        while (matcher.find()){
+            System.out.println("Second line: " + matcher.group());
+        }
+    }
+}
+Console:
+false
+First line: ____5__
+First line: ___
+First line: _5555______
+Second line: _5_
+Second line: ___
+
+- - - Синтаксис регулярных выражений - - -
+
+- Специальные символы:
+\xhh - символ с шестнадцатеричным кодом 0xhh \uhhhh Символ Unicode с шестнадцатеричным кодом 0xhhhh;
+\t - табуляция;
+\n - новая строка;
+\r - возврат каретки;
+
+- Классы символов:
+. - любой символ;
+[abc] - любой из указанных в скобках символов;
+[^abc] - любой символ, кроме указанных в скобках;
+[a-zA-Z] - любые буквы в малом регистре или в большом регистре;
+\s - пробельный символ (пробел, перевод строки, табуляция и т.п.);
+\S - любой непробельный символ;
+\d или [0-9] - любая цифра;
+\D или [^0-9] - любой символ, только не цифра;
+\w равносильно [a-zA-Z_0-9];
+\W - противоположно предыдущей строке;
+
+- Обозначения границ:
+^ - начало строки;
+$ - конец строки;
+\b - граница слова;
+\B - не граница слова;
+\G - конец предыдущего соответствия.
+
+- Группировка:
+X? - ни одного или один раз;
+X* - любое количество;
+X+ - один раз или больше;
+X{n} - точно n раз;
+X{n,} - n и более раз;
+X{n,m} - n или больше, но не больше m.
+
+Часть регулярного выражения можно выделить в группу, для этого его следует поместить в круглые скобки. При нахождении соответствия, указав методу group() номер, начиная с единицы, можно получить не все соответствие, а только одну из его групп.

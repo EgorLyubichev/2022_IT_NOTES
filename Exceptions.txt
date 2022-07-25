@@ -1,20 +1,81 @@
-	Unchecked exceptions (Runtime exceptions):
-ArithmeticException
-ArrayIndexOutOfBoundsException
-ArrayStoreException
-ClassCastException - когда производится недопустимое преобразование типов
-ConcurrentModificationException
-IllegalArgumentException
-IllegalMonitorStateException
-IllegalStateException
-IllegalThreadStateException
-IndexOutOfBoundsException
-NegativeArraySizeException
-NullPointerException
-NumberFormatException
-StringIndexOutOfBoundsException
-MissingResourceException
-EnumConstantNotPresentException
-UnsupportedOperationException
+- - - Exceptions - - -
 
-	Checked Exception (Compile time exception).
+ - Unchecked exceptions (Runtime exceptions):
+
+ArithmeticException - арифметическая ошибка, например, деление на ноль.
+
+ArrayIndexOutOfBoundsException - выход индекса за пределы массива.
+
+ArrayStoreException
+
+ClassCastException - когда производится недопустимое преобразование типов.
+
+ConcurrentModificationException
+
+IllegalArgumentException - неверный аргумент при вызове метода.
+
+IllegalMonitorStateException
+
+IllegalStateException
+
+IllegalThreadStateException - запрашиваемая операция несовместима с текущим потоком
+
+IndexOutOfBoundsException - тип индекса вышел за допустимые пределы.
+
+NegativeArraySizeException - создан массив отрицательного размера.
+
+NullPointerException - неверное использование пустой ссылки.
+
+NumberFormatException - неверное преобразование строки в числовой формат.
+
+StringIndexOutOfBoundsException
+
+TypeNotPresentException - тип не найден.
+
+MissingResourceException
+
+EnumConstantNotPresentException
+
+UnsupportedOperationException - обнаружена неподдерживаемая операция.
+
+ - Checked Exception (Compile time exception).
+ 
+ClassNotFoundException - класс не найден.
+
+CloneNotSupportedException - попытка клонировать объект, который не реализует интерфейс Cloneable.
+
+IllegalAccessException - запрещен доступ к классу.
+
+InstantiationException - попытка создать объект абстрактного класса или интерфейса.
+
+InterruptedException - поток прерван другим потоком.
+
+NoSuchFieldException - запрашиваемое поле не существует.
+
+NoSuchMethodException - запрашиваемый метод не существует.
+
+ReflectiveOperationException - исключение, связанное с рефлексией.
+
+Существует пять ключевых слов, используемых в исключениях: try, catch, throw, throws, finally. Порядок обработки исключений следующий.Операторы программы, которые вы хотите отслеживать, помещаются в блок try. Если исключение произошло, то оно создаётся и передаётся дальше. Ваш код может перехватить исключение при помощи блока catch и обработать его. Системные исключения автоматически передаются самой системой. Чтобы передать исключение вручную, используется throw. Любое исключение, созданное и передаваемое внутри метода, должно быть указано в его интерфейсе ключевым словом throws. Любой код, который следует выполнить обязательно после завершения блока try, помещается в блок finally.
+
+try {
+    // блок кода, где отслеживаются ошибки
+}
+catch (тип_исключения_1 exceptionObject) {
+    // обрабатываем ошибку
+}
+catch (тип_исключения_2 exceptionObject) {
+    // обрабатываем ошибку
+}
+finally {
+    // код, который нужно выполнить после завершения блока try
+}
+
+Класс Exception используется для обработки исключений вашей программой. Вы можете наследоваться от него для создания собственных типов исключений. Для распространённых ошибок уже существует класс RuntimeException, который может обрабатывать деление на ноль или определять ошибочную индексацию массива.
+Класс Error служит для обработки ошибок в jvm.
+
+ - Finally.
+Когда исключение передано, выполнение метода направляется по нелинейному пути. Это может стать источником проблем. Например, при входе метод открывает файл и закрывает при выходе. Чтобы закрытие файла не было пропущено из-за обработки исключения, был предложен механизм finally.
+Ключевое слово finally создаёт блок кода, который будет выполнен после завершения блока try/catch, но перед кодом, следующим за ним. Блок будет выполнен, независимо от того, передано исключение или нет. Оператор finally не обязателен, однако каждый оператор try требует наличия либо catch, либо finally.
+
+

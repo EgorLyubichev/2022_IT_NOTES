@@ -1,0 +1,107 @@
+package com.lev;
+
+import java.util.Arrays;
+import java.util.List;
+
+public class Main {
+    public static void main(String[] args) {
+        /*Дана коллекция строк Arrays.asList("Aa","Bb","Cc","Aa","Dd"). Обработать её при помощи стримов*/
+        List<String> list = Arrays.asList("Aa","Bb","Cc","Aa","Dd");
+
+        /*Вернуть количество вхождений объекта Aa*/
+        System.out.println(list.stream().filter("Aa"::equals).count()); // res: 2
+
+        /*Вернуть первый элемент коллекции или 0, если коллекция пуста*/
+        System.out.println(list.stream().findFirst().orElse("0")); // res: Aa
+
+        /*Вернуть последний элемент коллекции или «empty», если коллекция пуста*/
+        int position = list.size() - 1;
+        System.out.println(list.stream().skip(position).findAny().orElse("empty")); // res: Dd
+
+        /*Найти элемент в коллекции равный «Cc» или кинуть ошибку*/
+        System.out.println(list.stream().filter("Cc"::equals).findFirst().get()); // res: Cc
+
+        /*Вернуть второй элемент коллекции по порядку*/
+        System.out.println(list.stream().skip(1).findFirst().get()); // res: Bb
+
+        /*Вернуть два элемента начиная со второго*/
+        System.out.println(Arrays.toString(list.stream().skip(1).limit(2).toArray())); // res: [Bb, Cc]
+
+        /*Выбрать все элементы по шаблону*/
+        System.out.println(Arrays.toString(list.stream().filter(s -> s.contains("a")).toArray())); // res: [Aa, Aa]
+    }
+}
+
+Задача: Дана коллекция класс People (с полями name — имя, age — возраст, sex — пол), вида Arrays.asList( new People(«Вася», 16, Sex.MAN), new People(«Петя», 23, Sex.MAN), new People(«Елена», 42, Sex.WOMEN), new People(«Иван Иванович», 69, Sex.MAN)). Давайте посмотрим примеры как работать с таким классом:
+
+Выбрать мужчин-военнообязанных (от 18 до 27 лет):
+peoples.stream().filter((p)-> p.getAge() >= 18 && p.getAge() < 27 && p.getSex() == Sex.MAN).collect(Collectors.toList());
+res: [{name='Петя', age=23, sex=MAN}]
+
+Найти средний возраст среди мужчин:
+peoples.stream().filter((p) -> p.getSex() == Sex.MAN).mapToInt(People::getAge).average().getAsDouble();
+res: 36.0
+
+Найти кол-во потенциально работоспособных людей в выборке (т.е. от 18 лет и учитывая что женщины выходят в 55 лет, а мужчина в 60):
+peoples.stream().filter((p) -> p.getAge() >= 18).filter(
+(p) -> (p.getSex() == Sex.WOMEN && p.getAge() < 55) || (p.getSex() == Sex.MAN && p.getAge() < 60)).count();
+res: 2
+
+
+collection1 = Arrays.asList(«a1», «a2», «a3», «a1»)
+убрать первый символ и вернуть массив чисел (int[])
+collection1.stream().mapToInt((s) -> Integer.parseInt(s.substring(1))).toArray();
+res: [1, 2, 3, 1]
+
+
+Из коллекции получить все числа, перечисленные через запятую из всех элементов:
+public class Main {
+    public static void main(String[] args) {
+        List<String> collection = Arrays.asList("1,2,0", "4,5");
+        String[] numbers = collection.stream().flatMap((p) -> Arrays.asList(p.split(",")).stream()).toArray(String[]::new);
+        System.out.println(Arrays.toString(numbers));
+    }
+}
+res: [1, 2, 0, 4, 5]
+
+Обратите внимание: все map функции могут вернуть объект другого типа (класса), то есть map может работать со стримом строк, а на выходе дать Stream из значений Integer или получать класс людей People, а возвращать класс Office, где эти люди работают и т.п., flatMap (flatMapToInt и т.п.) на выходе должны возвращать стрим с одним, несколькими или ни одним элементов для каждого элемента входящего стрима.
+
+
+/*Примеры использования Sorted функции*/
+public class Main {
+    public static void main(String[] args) {
+/*даны две коллекции коллекция строк Arrays.asList(«a1», «a4», «a3», «a2», «a1», «a4»)
+ и коллекция людей класса People (с полями name — имя, age — возраст, sex — пол),
+ вида Arrays.asList( new People(«Вася», 16, Sex.MAN), new People(«Петя», 23, Sex.MAN),
+ new People(«Елена», 42, Sex.WOMEN), new People(«Иван Иванович», 69, Sex.MAN)).*/
+        List<String> list = Arrays.asList("a1", "a4", "a3", "a2", "a1", "a4");
+        List<People> people = Arrays.asList(
+                new People("John", 16, Sex.MAN),
+                new People("Peter", 23, Sex.MAN),
+                new People("Helen", 42, Sex.WOMAN),
+                new People("Ivan", 69, Sex.MAN));
+
+        /*Отсортировать коллекцию строк по алфавиту*/
+        System.out.println(list.stream().sorted().collect(Collectors.toList()));
+
+        /*Отсортировать коллекцию строк по алфавиту в обратном порядке*/
+        System.out.println(list.stream().sorted(((o1, o2) -> -(o1.compareTo(o2)))).collect(Collectors.toList()));
+        // -(o1.compareTo(o2)) - перед выражением сравнения стоит знак минус, что позволяет перевернуть сравнения
+
+        /*Отсортировать коллекцию строк по алфавиту и убрать дубликаты*/
+        System.out.println(list.stream().distinct().sorted().collect(Collectors.toList()));
+
+        /*Отсортировать коллекцию строк по алфавиту в обратном порядке и убрать дубликаты*/
+        System.out.println(list.stream().sorted(((o1, o2) -> -(o1.compareTo(o2)))).distinct()
+                .collect(Collectors.toList()));
+
+        /*Отсортировать коллекцию людей по имени в обратном алфавитном порядке*/
+        System.out.println(people.stream().sorted((o1, o2) -> -(o1.getName().compareTo(
+                o2.getName()))).collect(Collectors.toList()));
+
+        /*Отсортировать коллекцию людей сначала по полу, а потом по возрасту*/
+        System.out.println(people.stream().sorted(
+                (o1, o2) -> o1.getSex() != o2.getSex() ? o1.getSex().compareTo(o2.getSex())
+                : o1.getAge()- o2.getAge()).collect(Collectors.toList()));
+    }
+}

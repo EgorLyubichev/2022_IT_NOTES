@@ -13,6 +13,7 @@
 	[git remote -v] (проверка удаленного адреса)
 	[git remote add origin ссылка на удаленный репозиторий] (указание на новый удаленный репозиторий).
 8. Отправка изменений локального репозитория в Git:
-	[git push origin main]
+	[git push origin main(или 'master')]
+	лучше так --> git push --set-upstream origin master
 	
 	

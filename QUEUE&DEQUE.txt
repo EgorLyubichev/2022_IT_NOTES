@@ -1,0 +1,52 @@
+- - - QUEUE - - -
+add(E element) - добавить элемент - throws exception
+offer(E element) - добавить элемент - null
+remove() - удалить элемент - throws exception
+poll() - удалить элемент - null
+Команды проверки наличия элемента в очереди:
+element() - в случае отсутствия элемента throws exception
+peek() - в случае отсутствия элемента null
+
+public class Main {
+    public static void main(String[] args) {
+        Queue<String> queue = new LinkedList<>();
+        queue.offer("ABC");
+        queue.offer("DEF");
+        queue.offer("GHI");
+        System.out.println(queue.element());
+    }
+}
+// Console: ABC
+
+- - - DEQUE - - - (На примере ArrayDeque)
+ArrayDeque as stack:
+push(E element) - добавить элемент;
+pop() - remove element
+
+public class Main {
+    public static void main(String[] args) {
+        Deque<String> stack = new ArrayDeque<>();
+        stack.push("1"); // добавляем в стек
+        stack.push("2");
+        stack.push("3");
+        while (!stack.isEmpty()) {
+            System.out.println(stack.pop()); // удаляем из стека
+        }
+
+        Deque<String> queue = new ArrayDeque<>();
+        stack.offer("11"); // добавляем в очередь
+        stack.offer("22");
+        stack.offer("33");
+        while (!stack.isEmpty()) {
+            System.out.println(stack.poll()); // удаляем из очереди
+        }
+    }
+}
+// Console:
+3
+2
+1
+11
+22
+33
+

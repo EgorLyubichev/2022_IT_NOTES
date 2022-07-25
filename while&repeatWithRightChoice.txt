@@ -1,0 +1,14 @@
+public class Test {
+    public static void main(String[] args) {
+        while (true) {
+            Scanner scanner = new Scanner(System.in);
+            String number = scanner.nextLine();
+            System.out.println("number --> " + number);
+            if ("5".equals(number)) {
+                return;
+            }
+        }
+    }
+}
+/*Цикл while крутится до того момента, пока пользователь не выбирет 5.
+В блоке if значение, с которым мы сравниваем стоит в первой позиции, чтобы не словить NullPointerException если придет null*/

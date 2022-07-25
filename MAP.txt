@@ -1,0 +1,68 @@
+Для реализации ассоциативного массива используется класс HashMap.
+Класс имеет следующие методы:
+void clear();
+Object clone();
+boolean containsKey(Object key);
+boolean containsValue(Object value);
+--> Set entrySet() - возвращает коллекцию из элементов, содержащихся в массиве.
+	Пример использования данного метода:
+	public class Main {
+    public static void main(String[] args) {
+        Map<Integer, String> map = new HashMap<>();
+        map.put(22, "DD");
+        map.put(33, "TT");
+        map.put(44, "SCh");
+        Set<Map.Entry<Integer, String>> set = map.entrySet();
+        for (Map.Entry<Integer, String> me:set) {
+            System.out.println("Key: " + me.getKey() + ", value: " + me.getValue());
+        }
+    }
+}
+
+Object get(Object key); - если такого ключа нет, вернет null.
+boolean isEmpty();
+--> Set keySet() - возвращает коллекцию, содержащую ключи из данного массива.
+	For exemple:
+	public class Main {
+    public static void main(String[] args) {
+        Map<Integer, String> map = new HashMap<>();
+        map.put(22, "DD");
+        map.put(33, "TT");
+        map.put(44, "SCh");
+        Set<Integer> set = map.keySet();
+        System.out.println(set);
+    }
+} // Console: [33, 22, 44]
+
+Object put(Object key, Object value);
+void putAll(Map m)
+Object remove(Object key);
+int size();
+
+Итераторы существуют только для коллекции Set и List. Коллекции типа Map напрямую перебираться итераторами не могут. Можно извлечь набор ключей в виде Set и, перебирая его итератором, перебрать Map.
+	For example:
+	public class Main {
+    public static void main(String[] args) {
+        Map<Integer, String> map = new HashMap<>();
+        map.put(22, "DD");
+        map.put(33, "TT");
+        map.put(44, "SCh");
+        Set<Integer> set = map.keySet();
+        Iterator<Integer> iterator = set.iterator();
+        while(iterator.hasNext()){
+            Integer i = iterator.next();
+            System.out.println(i + " " + map.get(i));
+        }
+    }
+}
+// Console:
+33 TT
+22 DD
+44 SCh
+
+! Метод put() не только может добавлять, но и обновлять. Т.е. если у нас в коллекции есть объект с таким ключом и мы добавляем новый объект с таким ключом, то произойдёт замена.
+
+Если мы String используем в качестве ключа, то Map работает быстрее, т.к. у String есть поле hash по умолчанию.
+
+
+

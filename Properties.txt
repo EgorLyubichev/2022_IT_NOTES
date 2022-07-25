@@ -1,0 +1,17 @@
+Содержимое файла dataBaseConnection.properties:
+url=jdbc:mysql://127.0.0.1:3307/cinema_db
+
+Как вычитывать данные из этого файла:
+public class Main {
+    public static void main(String[] args) {
+        File dbProperties = new File("src/files/dataBaseConnection.properties");
+        Properties propertiesDB = new Properties();
+        try {
+            propertiesDB.load(new FileReader(dbProperties));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String url = propertiesDB.getProperty("url");
+        System.out.println(url);
+    }
+}
