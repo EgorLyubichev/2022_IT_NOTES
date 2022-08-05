@@ -1,0 +1,38 @@
+1) Creating database:
+
+CREATE DATABASE jd2 // jd2 - database naming
+WITH
+OWNER = postgres
+ENCODING = 'UTF8'
+CONNECTION LIMIT = -1;
+
+2) create schema:
+
+CREATE SCHEMA schemaName
+AUTHORIZATION postgres;
+
+3) delete schema:
+
+DROP SCHEMA tableschema;
+
+4) create table: // users - table naming into schema tableschema
+
+a) - создает таблицу с колонками в ней:
+create table tableschema.users
+(
+    id    serial,
+    name  varchar(15) default 'noname'  not null,
+    login varchar(15) default 'default' not null
+);
+
+b) - надстройка параметров столбцов(a, b, c) выполняются последовательно:
+create unique index users_id_uindex
+    on tableschema.users (id);
+
+create unique index users_login_uindex
+    on tableschema.users (login);
+
+alter table tableschema.users
+    add constraint users_pk
+        primary key (id);
+

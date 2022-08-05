@@ -1,0 +1,18 @@
+1) Сначала идёт шапка web.xml файла. Например:
+
+<web-app id="WebApp_ID" version="2.4"
+         xmlns="http://java.sun.com/xml/ns/j2ee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+		 http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+
+2) Далее Необходимо указать главную страницу нашего приложения. Например:
+	<welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+	
+// обычно в проекте это страница index.jsp
+
+3) После следуют структуры в зависимости от последовательности работы приложения (это могут быть сервлеты, листнеры, фильтры)

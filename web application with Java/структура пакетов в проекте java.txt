@@ -1,0 +1,17 @@
+...
+	> src
+		> main
+			> java
+			> recources
+-->			> webapp
+				> WEB-INF
+					web.xml
+				index.jsp
+				
+Algorithm:
+1) Create "webapp" directory --> 2) file "index.jsp" --> 3) directory "WEB-INF" --> 4) file web.wml
+				
+Когда в проекте добавляется файл web.xml, idea сразу понимает, что она имеет дело с web приложением.
+.war - web архив.
+Создаем webapp пакет --> затем создаем файл index.jsp --> затем папку WEB-INF --> web.xml
+

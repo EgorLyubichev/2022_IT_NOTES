@@ -74,6 +74,19 @@ Stream API это новый способ работать со структур
 	    Stream.of(1, 2, 3, 4, 2, 5)
 			.takeWhile(x -> x < 3)
 			.forEach(System.out::println); // 1, 2
+			
+- dropWhile(Predicate predicate)
+	Появился в Java 9. Пропускает элементы до тех пор, пока они удовлетворяют условию, затем возвращает оставшуюся часть стрима. Если предикат вернул для первого элемента false, то ни единого элемента не будет пропущено. Оператор подобен skip, только работает по условию.
+		Stream.of(1, 2, 3, 4, 2, 5)
+			.dropWhile(x -> x >= 3)
+			.forEach(System.out::println);
+		// 1, 2, 3, 4, 2, 5
+     
+		Stream.of(1, 2, 3, 4, 2, 5)
+			.dropWhile(x -> x < 3)
+			.forEach(System.out::println);
+		// 3, 4, 2, 5
+
 
 	
 - sorted

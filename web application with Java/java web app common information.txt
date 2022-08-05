@@ -1,0 +1,29 @@
+Сервлет - это класс нашего приложения, который может обработать http запрос.
+1) new()
+2) init()
+3) every request invoke service() method inside servlet --> invoke our classes
+4) destroy()
+
+Каждый сервлет - это отдельный класс. Для работы это класса придумали интерфейсы ServletRequest и ServletResponse. У каждого из этих интерфейсов есть реализация: HttpServletRequest & HttpServletResponse. Это классы, кот. являются обёрткой над http запросом, кот. приходит к нам на сервер. И из этих классов и их методов мы можем вытянуть всю полезную для нас информацию.
+Другими словами, servlet - это класс нашего приложения, кот. может обработать http запрос.
+
+У каждого сервлета, согласно спецификации и согласно интерфейсу, будет свой определённый жизненный цикл.
+Который состоит из
+	1) init()
+	2) service()
+	3) destroy()
+	
+Person(--> request) --> Apache HTTP server --> Apache Tomcat --> our application --> servlet.
+
+Servlet: http request processing:
+1) new()
+2) init()
+3) every request invoke service() method inside servlet
+4) destroy()
+
+service(): invoke our classes
+
+Принято размещать классы, кот. явл. сервлетами в папку "controller". И принято называть класс, кот. будет отвечать за процессы FrontController (единая точка входа в наше приложение).
+
+JSP файл - это тот же html файл, но внутри него есть вставки java кода. Этот джава код выполняется и наполняет контентом саму страницу.
+
