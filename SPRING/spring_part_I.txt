@@ -1,0 +1,28 @@
+Для построения спринг приложения: pom.xml: dependencies: spring core, spring beans, spring context.
+
+Создаем в папке resources файл applicationContext.xml.
+Наполняем его: 
+	<?xml version="1.0" encoding="UTF-8"?>
+	<beans  xmlns="http://www.springframework.org/schema/beans"
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			xmlns:context="http://www.springframework.org/schema/context"
+			xsi:schemaLocation="http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans.xsd
+			http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context.xsd">
+
+		<bean id="testBean"
+			  class="by.lev.TestBean">
+			<constructor-arg value="Egor"/>
+		</bean>
+
+	</beans>
+	
+В psvm методе создаем класс ClassPathXmlApplicationContext. Этот класс читает инфу из applicationContext.xml
+
+- - - IoC - - -
+Inversion of Control - Инверсия управления.
+
+- - - DI - - -
+Dependency Injection - Внедрение зависимостей.
+

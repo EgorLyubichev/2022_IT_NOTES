@@ -1,0 +1,32 @@
+Логирование:
+
+В основе библиотеки log4j лежит три понятия - логгер (logger), аппендер (appender), компановка (layout).
+
+Уровни логирования: 
+All
+Trace
+Debug
+Info
+Warm
+Error
+Fatal
+Off
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+
+
+В классах, где мы планируем прописать логирование, создаем объект логгинга:
+private static final Logger logger = Logger.getLogger(JdbcTemplateUserRepository.class); // в параметры прописываем тот же класс, где мы его используем (это для того, чтобы в файле, где записывается логирование, был отображен класс, в котором это происходит).
+Далее, в нужным нам методах, делаем вызов созданного объекта логгера, вызывая у него соответствующий метод (error, info и т.д. Это для того, чтобы логгер закидывал нужноу инфу в нужную категорию).
+Так, например, логирование в обработке исключения будет выглядеть следующим образом:
+catch (EmptyResultDataAccessException e) {
+(-->)    logger.error("DB connection process issues: Entity User with id " + id + " doesn't exist", e);
+            throw new NoSuchEntityException("Entity User with id " + id + " doesn't exist", 404);
+        } 
+
+
+

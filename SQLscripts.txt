@@ -1,0 +1,84 @@
+/*последовательность выполнения команд:
+select
+from
+where
+group by
+having
+order by
+limit
+*/
+
+/*CRUD operations*/
+/*CREATE*/
+INSERT INTO schema_db2.users (id, login, name, birth, registration_date, modification_date, is_deleted) VALUES (DEFAULT, 'rocker', 'Dima', null, DEFAULT, DEFAULT, DEFAULT);
+
+/*READ*/
+SELECT * FROM tablename;
+select id,login,name from users where id = '5';
+select id,login from users where name = 'Kuzia';
+
+select u.id as id, u.user_name as name
+from users as u
+where is_deleted = false
+order by id desc;
+
+select u.name, c.ch_name
+from users as u
+inner join l_users_channels luc on u.id = luc.user_id
+inner join channels c on c.id = luc.channel_id;
+
+select user_id, count(user_id)
+from l_users_channels
+group by user_id
+order by count(user_id) desc, user_id;
+
+select u.name, l.user_id, count(l.user_id)
+from users as u
+inner join l_users_channels as l on u.id = l.user_id
+group by u.name, l.user_id
+order by u.name asc;
+
+select u.name, luch.user_id, count(luch.user_id)
+from users as u
+inner join l_users_channels as luch on u.id = luch.user_id
+group by u.name, luch.user_id
+having count(luch.user_id) >= 2
+order by count(luch.user_id) desc, user_id asc;
+
+select concat(u.name, ' id:', luch.user_id) as owner, count(luch.user_id)
+from users as u
+join l_users_channels as luch on u.id = luch.user_id
+group by concat(u.name, ' id:', luch.user_id), luch.user_id
+order by count(luch.user_id) desc, owner asc
+limit 3;
+
+select random() * 100 + 1; /*Тоже работает. Т.е. разные математические функции postgreSQL поддерживает*/
+
+select sum(weight) from users; /*сумма значений*/
+
+select avg(weight) from users; /*среднее значение*/
+
+select sum(weight), min(weight), max(weight), avg(weight) from users;
+
+select count(id) from users;
+
+
+/*UPDATE*/
+UPDATE tablename SET column_name = 'Kuzia' WHERE id = row_number;
+/*If you don't use "WHERE ..." all fields into the column will be changed*/
+
+update users set weight = random() * 60 + 40;
+
+
+/*DELETE*/
+delete from users where id = '7';
+/*Обычно никто не удаляет ряды из базы, если нужно удалить. Для этого используют отдельное поле, в котором стоит флаг - (удалено / не удалено)*/
+
+
+- - - JOIN - - -
+
+select * from users
+inner join l_users_channels as luc on users.id = luc.user_id
+inner join channels as c on c.id = luc.channel_id;
+
+/*многие ко многим - линковочная таблица 45:00 7-й вебинар*/

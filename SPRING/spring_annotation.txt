@@ -1,0 +1,86 @@
+@Component
+Spring создает бины тех классов, над которыми стоит эта аннотация.
+
+@Autowired
+(eng. autowired - автоматическое подключение)
+Создана для внедрения бинов в необходимый класс. При указании реализации мы можем указать как интерфейс, так и конкретную реализацию интерфейса.
+
+@Qualifier("rockMusic")
+(eng. qualifier - уточнитель)
+При помощи данной аннотации мы говорим спрингу, какой из бинов мы именно ожидаем видеть в качестве внедрения.
+
+@Scope("singleton")
+Аннотация, определяющая поведение создания бинов данного класса. Смысл в том, что если scope = singleton (это, кстати, по умолчанию), то спринг создает только один экземпляр класса. Если @Scope("prototype"), то при каждом вызове такого бина, создается новый экземпляр класса. 
+	P.s. При синглтоне метод destroy вызывается, а при прототайпе - нет.
+
+@PostConstruct - вызывается указанный init-method.
+
+@PreDestroy - вызывается указанный destroy-method.
+
+аннотация @Value
+При нижеуказанных настройках файла musicPlayer.properties и файла applicationContext.xml можно напрямую указывать значение поля с помощью аннотации @Value.
+[file] musicPlayer.properties :=>
+musicPlayer.name=PlayerName
+[file] applicationContext.xml :=>
+<context:property-placeholder location="classpath:musicPlayer.properties"/>
+
+@Value("${musicPlayer.name}")
+private String name;
+
+@Configuration
+Аннотация для java-класса, содержащего настройки для спринга. Этот класс собою заменяет конфигурационный xml файл с настройками для спринга (applicationContext.xml).
+
+@ComponentScan("ru.alishev.springcourse")
+Дирректория, указанная в скобках указывает конфигурационному файлу место для последующего сканирования бин-классов в проекте.
+
+Пример использования вышеуказанных аннотаций:
+@Configuration
+@ComponentScan("ru.alishev.springcourse")
+public class SpringConfig{
+	
+}
+
+@Bean
+В конфигурационном java-файле для спринга также можно создавать бины. Для этого используют @Bean. Т.е. получается, что можно задать диапазон поиска бинов самому спрингу, а можно вручную прописать те классы, которые являются бинами.
+Пример: 
+@Configuration
+public class SpringConfig{
+	@Bean
+	public ClassicalMusic musicBean(){ //musicBean - это bean id (соответственно xml файлу)
+		return new ClassicalMusic();
+	}
+} 
+
+Не забываем, что мы можем создавать бины с внедренными в них бинами. Пример:
+
+@Configuration
+public class SpringConfig{
+	
+	@Bean
+	public ClassicalMusic musicBean(){
+		return new ClassicalMusic();
+	}
+	
+	@Bean
+	public MusicPlayer musicPlayer(){
+		return new MusicPlayer(musicBean()); // внедрили в MusicPlayer бин ClassicalMusic
+	}	
+}
+
+@PropertySource
+Аннотация для указания property файла в конфигурационном файле. Пример:
+
+@Configuration
+@PropertySource("classpath:musicPlayer.properties")
+public class SpringConfig{
+	
+	@Bean
+	public ClassicalMusic musicBean(){
+		return new ClassicalMusic();
+	}
+	
+	@Bean
+	public MusicPlayer musicPlayer(){
+		return new MusicPlayer(musicBean()); // внедрили в MusicPlayer бин ClassicalMusic
+	}	
+}

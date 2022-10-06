@@ -1,0 +1,32 @@
+Создаем директорию exception (в by.lev). => Class: NoSuchEntityException extends RuntimeException.
+Создаем поля:
+    private String customMessage;
+    private Integer errorCode;
+	
+Или, при использовании Lombok:
+@RequiredArgsConstructor
+public class NoSuchEntityException extends RuntimeException {
+
+    private final String customMessage;
+
+    private final Integer errorCode;
+
+
+    @Override
+    public String toString() {
+        return "NoSuchEntityException: customMessage: " + customMessage +
+                ", errorCode: " + errorCode + ".";
+    }
+}
+    
+
+После чего создаем конструкторы (все из предложенных, с двумя имеющимеся полями).
+Добавляем метод toString() - для того, чтобы в консоли отображалось сообщение, нами написанное.
+
+
+Далее, в месте, где мы ожидаем отловить исключение, в блоке catch пишем, например:
+
+catch (EmptyResultDataAccessException e) {
+            throw new NoSuchEntityException("Entity User with id " + id + " doesn't exist", 404);
+        }
+		

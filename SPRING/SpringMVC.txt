@@ -1,0 +1,98 @@
+Spring MVC - это набор функциональности. Во-первых, это единая точка входа пользовательских запросов.
+Спринг МВС предоставляет нам единую точку входа, кот. называется DispatcherServlet. Его мы будем указывать как основной сервлет по обработке аодбзовательских запросов.
+
+Подкачиваем библиотеку
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		
+DispatcherServlet коммуницирует с такими сущностями как:
+HandlerMapping
+Controller
+View Resolver
+View
+
+HandlerMapping - интерфейс. Он выбирает класс и выбирает метод, который нужно вызвать на основании http метода и урла.
+Там будет храниться HTTP Method + URL : method name (URL - ключ, method name - значение).
+
+class Controller. Обрабатывает пользовательский запрос (куда переходить, на какой урл, какой сервис вызвать, положить на страничку и отобразить).
+
+ViewResolver. На основании того, какой урл на какую страничку замаплен, будет автоматически делать переход на нужную страницу. Это в классическом случае, если мы используем SpringMVC. Если же мы используем SpringRestMVC, то ViewResolver не осуществляется. Осуществляется сразу степ View.
+
+
+Алгоритм:
+На DispatcherServlet приходит запрос. Дальше мы идём в HandlerMapping, где по запросу понимаем какой метод нам надо вызвать, делаем инвокейшн метода на Controller(е). Внутри этого метода описывается логика взаимодействия с сервисом, базой данных, преобразование пользовательских запросов, вытягивание параметров пользовательского запроса; преобразованием их; и выбором перехода на какую-то определенную страницу (ViewResolver), если она есть, либо же просто возврат данных (View), в каком-то формате, если мы используем Rest.
+
+На старте работы приложения, на этапе поднятия контекста, HandlerMapping идёт и сканирует все классы имеющие аннотации @Controller или @RestController. Находит их и составляет пару: название класса и название метода соответствует такому-то http методу и определенному урлу. И у нас хранится пара: ключ - значение (например: GET /users : UserController findAllUsers()). А затем через рефлексию делает метод invoke.
+
+Mapping - это формирование мапы, где есть соответствие: какому-то http методу + часть урла - в значении выступает ссылка на метод, кот. спрингу необходимо вызвать для отработки определенной логики по пользовательскому запросу.
+
+ - - - Настройка работы SpringMVC - - -
+В папке WEB-INF создаем файл MainServlet-servlet.xml. 
+(В данном случае идёт настройка через xml файл. Далее будет рассмотрена версия с настройками через классы.)
+Файл MainServlet-servlet.xml назван так, потому как название этого файла должно совпадать с названием сервлета, определяющего DispatcherServlet в файле web.xml. Т.е. в файле web.xml прописан следующий сервлет:
+
+	<servlet>
+		<servlet-name>MainServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MainServlet</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	
+Если мы так этот файл не назовём, то все jsp страницы не будут авторизовываться.
+Внутри же файла MainServlet-servlet.xml мы имеем следующее содержание:
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+   http://www.springframework.org/schema/context
+   http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <context:component-scan base-package="com.noirix"/>
+
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+</beans>
+
+Т.е. из данного содержания видно, что Спринг будет находить все файлы в папке WEB-INF/jsp/ с форматом jsp.
+
+Для того, чтобы эта штука заработала, нам необходимо прописать контроллер.
+В папке controller создаем класс UserController. И объявим его как контроллер (@Controller).
+Данный класс будет являться бином.
+Объявляем private final UserServiceInterface userService; (соответственно @RequiredArgsConstructor).
+После этого мы можем описывать маппинг, описывать сам метод, описывать ViewResolver и View и т.д.
+
+Мы создаем метод (public ModelAndView findAllUsers(){}), ставим аннотацию @RequestMapping, в параметрах которой указываем: method = RequestMethod.GET, value = "/users". Т.е. при помощи этой аннотации мы указываем какой запрос пользователя должен прийти на сервер (на DispatcherServlet), чтобы мы вызвали данный метод.
+
+Далее в методе мы прописываем непосредственно метод сервиса. В данном случае 
+List<User> users = userService.readAll();
+
+После чего мы добавляем
+ModelAndView model = new ModelAndView();
+
+Этот класс поможет нам моделировать данные на странице.
+
+Далее мы формируем, какие данные мы хотим передавать на определенную страницу.
+При помощи метода 
+model.setViewName("users"); 
+мы говорим, что хотим открыть jsp файл users.jsp, который находится в директории WEB-INF/jsp/
+
+При помощи метода 
+model.addObject("users", users); 
+мы говорим, что хотим добавить объекты для отображения на странице.
+Также мы можем добавлять и любые другие данные.
+
+Соответственно, в конце метода
+return model;
+
+Итого: Мы создали маппинг, который при GET запросе на наш сервер с указанием "/users" будет находить этот метод и вызывать его.

@@ -1,0 +1,287 @@
+Spring - это фреймфорк. Фреймворками называют многофункциональные библиотеки, кот. состят из нескольких модулей, которые способны выполнять множественные задачи.
+При работе со Спрингом мы можем работать и с тестированием приложений, и разворачивать веб-сервер, и работать с базой данных, и внедрение сквозной функциональности.
+
+Составные части Спринга:
+ - - -  Core container.
+Это механизм, кот. позволяет создавать объекты, определять этот объект, хранить в памяти и выстраивать процедуру хранения.
+ - - - Spring context.
+Место, кот. будет хранить всю информацию о бинах и непосредственно сами объекты называется Spring Context. Он поднимается на старте работы приложения, заполняется объектами и дальше приложение переходит в полное управление работы спрингом. Он определенные объекты подставляет в нужные места в рамках работы приложения.
+ - - - Spring expression (language).
+Это специальный язык (похож на скриптовую джаву) при помощи которого мы сможем писать определенные выражения для работы аспектов, для вытягивания бинов, для внидрения функциональности.
+ - - - Spring Test.
+У спринга есть механизмы, позволяющие нам писать юнит-тесты, интеграционные тесты.
+ - - - Spring AOP / Spring Aspects.
+Аспект-ориентированное программирование, кот. поддерживается спрингом через аспекты. Это сквозная функциональность, кот. будет пронизывать всё приложение и оно будет работать через прокси, через рефлексию.
+Через аспекты работает весь спринг.
+ - - - DATA ACCESS AND INTEGRATION:
+ JDBC / JMS / ORM / Transaction
+ - - - WEB & REMOTING:
+ Servlet / Web / Struts
+ 
+ 
+ - - - Spring BOOT.
+ Он собой оборачивает это всё, собирает наборы библиотек, кот. друг с другом не конфликтуют. Собирает их в так называемые стартеры.
+ 
+ 
+ - - - Inversion of Control:
+ Управление созданием и жизненным циклом объектов. Позволяет нам писать низко связный код. Это значит, что отказываемся от конкретных реализаций и программируем на интерфейсах, отдавая контроль управления нужным объектам и подстановкой нужных объектов в нужном месте приложения фреймворку.
+ Inversion of Control - это значит, что мы отдаем контроль по созданию, жизненному циклу, дополнению к функциональности объекта фреймворку.
+ - - - Dependency Injection
+ Внедрение зависимостей. Подстановка объекта по ссылке в определенное место приложения.
+ 
+ 
+  
+ Для того, чтобы написать, скажем, минимальное приложение на спринге, нам необходима конфигурация application Context. 
+ 
+ <!> class ClassPathXmlApplicationContext
+ Этот класс позволит нам:
+ 1) Стартовать приложение;
+ 2) Начать поднимать спринговый контекст;
+ 3) При инициализации спрингового контекста, этапы инициализации будут находиться в xml файле.
+ 
+ - - - Аннотации - - - 
+ При слоистой архитектуре приложения могут быть следующие аннотации:
+ DB layer: 
+	@Repository
+	@Component
+ Service layer:
+	@Service
+	@Component
+ Controller layer:
+	@Controller
+	@RestController
+	@Component
+	
+ Аннотация @Component говорит о том, что объект данного класса будет сформирован и будет расположен внутри контейнера спринга.
+ 
+ <!> class AnnotationConfigApplicationContext
+ Этот класс предназначен для создания бинов не при помощи xml файла, а при помощи аннотаций (т.е. участвуют бины, помеченные аннотациями).
+ 
+ - @Primary
+ Необходима в том случае, когда мы имеем две и более реализации интерфейса, бин которого пытаемся создать. Данная аннотация определяет приоритет класса для создания бина.
+ 
+ <!> Также мы можем обойтись без этой аннотации. В таком случае нужно указывать при создании бина имя класса, реализующего в конкретном случае этот интерфейс (писать с маленькой буквы - так его знает Спринг).
+ Пример:
+ public class Main {
+    public static void main(String[] args) {
+
+        AnnotationConfigApplicationContext annotationConfigApplicationContext = new AnnotationConfigApplicationContext("by.lev");
+        UserRepositoryInterface userRepository = annotationConfigApplicationContext.getBean
+/!/             ("userRepository", UserRepositoryInterface.class);
+        
+        List<User> users = userRepository.readAll();
+        for (User user : users) {
+            System.out.println(user);
+        }
+    }
+}
+
+Когда мы объявляем @Scope("prototype") на объекте, кот. не хранит никакого состояния, то мы просто забиваем память. Бины, которые отдаются на управление спрингу обычно не имею состояния. Либо же эти классы сами зависят от других объектов, которые сами являются бинами. Т.е. в контейнер нужно закидывать те классы, которые будут сервисными, классами для работы с базой данных, контроллеры (т.е. всё системное, всё то, что обслуживает функционал). Непосредственно сами объекты, которые есть в домене (User, Car, Student & etc.) они бинами никогда не являются. Они будут создаваться через оператора new внутри бинов, внутри методов в которых работают. 
+
+
+ @Qualifier("rockMusic")
+(eng. qualifier - уточнитель)
+ Эта аннотация нужна в том случае, когда реализация внедряемого бина может быть представлена несколькими классами. И мы таким образом указываем, какая имеено реализация нужно при внедрении. Эта аннотация ставится под аннотацией @Autowired при внедрении зависимости (бина).
+ При помощи данной аннотации мы говорим спрингу, какой из бинов мы именно ожидаем видеть в качестве внедрения.
+ Пример:
+
+@Service
+public class UserService implements UserServiceInterface {
+
+    @Autowired
+    @Qualifier("userRepository")
+    private UserRepositoryInterface userRepository;
+
+    @Override
+    public List<User> readAll() {
+        return userRepository.readAll();
+    }
+}
+
+ В библиотеке javax есть идентичные аннотации.
+ @Autowired = @Inject 
+ @Qualifier("className") = @Named("className")
+ Зачем это нужно. @Inject & @Named - это аннотации из Java. Т.е. если есть преддположение, что в последствии проект может переехать со Спринга на другой контейнер, то спринговые аннотации придется везде переписывать. Аннотации джавы переписывать не придётся. Т.е. стоит задуматься и, возможно, изучить джава аннотации.
+
+ Если внедрение происходит посредством конструктора.
+ Для того, чтобы не писать конструктор, мы можем объявить @RequiredArgsConstructor (from Lombok), которая сделает всё за нас. Нам, главное, объявить private final поля, которые должны попасть в конструктор и lombok создаст конструктор, задействовав эти поля.
+
+ Итог: Внедрять ("инджектить") можно несколькими способами. Или же посредством аннотаций @Autowired & @Qualifier (@Inject & @Named); или же посредством объявления конструктора.
+
+ Есть и третий способ внедрения - через сеттер. Тогда конструктор и аннотации к нему прописывать не нужно. Выглядит это следующим образом:
+
+@Service
+//@RequiredArgsConstructor
+public class UserService implements UserServiceInterface {
+
+    private UserRepositoryInterface userRepository;
+
+    @Autowired
+    public void setUserRepository(@Qualifier("userRepository") UserRepositoryInterface userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @Override
+    public List<User> readAll() {
+        return userRepository.readAll();
+    }
+}
+
+ - - - Вычитка проперти файла через джаву.
+ Создал пакет util. В нём создал класс DatabaseProperties. Ставим ему @Component, @Data, @AllArgsConstructor.
+ Также этому классу ставим аннотацию @PropertyResource("classpath:database.properties"). Это означает, что этот класс будет считывать значения по ключу из указанного файла (т.е. то, что будет над полями указано в аннотации @Value). 
+ Делаем аналог полей файла database.properties; ставим над каждым полем значение, приходящее в данное поле посредством аннотации @Value("${value}").
+ Т.е. выглядит это так:
+ 
+@Component
+@Data
+@AllArgsConstructor
+@PropertySource("classpath:database.properties")
+public class DatabaseProperties {
+
+    @Value("${POSTGRES_DRIVER}")
+    private String driver;
+
+    @Value("${DATABASE_URL}")
+    private String url;
+
+    @Value("${DATABASE_LOGIN}")
+    private String login;
+
+    @Value("${DATABASE_PASSWORD}")
+    private String password;
+}
+
+ После этого метод getProperty(String key) больше не нужен.
+ Объявляем теперь в классе MyPostgreSQLConnection внедренный бин DatabaseProperties.
+ А после в классе репозитория объявляем внедрение бина MyPostgreSQLConnection по тому же принципу. Всё работает красиво.
+ 
+ - - - JDBC Tamplate - - -
+ Эта такая штука, которая инкапсулирует работу JDBC.
+ Это значит, что она сама умеет открывать соединение к базе данных, управлять пулом соединений.
+ Необходимые библиотеки: spring jdbc, hikari cp (provider: zaxxer.com)
+ Для работы нам нужны 3 объекта. Это прописывается в классе ConnectionPoolConfig. 
+ 
+ Как настроить connectionPool?
+ бин DataSource делает всё то же самое, что мы прописывали вручную в getConnection.
+ Для работы пула соединений, необходимо сконфигурировать бин DataSource. В него включены те же параметры, что требуются для коннекшена. Этот бин выглядит следующим образом:
+ 
+	//ConnectionPool
+    @Bean
+    public DataSource hikariDatasource(DatabaseProperties databaseConfig){
+        HikariDataSource hikariDataSource = new HikariDataSource();
+
+        hikariDataSource.setJdbcUrl(databaseConfig.getUrl());
+        hikariDataSource.setUsername(databaseConfig.getLogin());
+        hikariDataSource.setPassword(databaseConfig.getPassword());
+        hikariDataSource.setDriverClassName(databaseConfig.getDriver());
+        hikariDataSource.setMaximumPoolSize(10);
+
+        return hikariDataSource;
+    }
+	
+ После этого он подтягивается в бины, являющиеся аналогами Statement & PreparedStatement
+ Весь класс:
+	
+package by.lev.configuration;
+
+import by.lev.util.DatabaseProperties;
+import com.zaxxer.hikari.HikariDataSource;
+import org.springframework.context.annotation.Bean;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.stereotype.Component;
+
+import javax.sql.DataSource;
+
+@Component
+public class ConnectionPoolConfig {
+
+    // analog Statement
+    @Bean
+    public JdbcTemplate jdbcTemplate(DataSource dataSource){
+        return new JdbcTemplate(dataSource);
+    }
+
+    // analog Prepared Statement
+    @Bean
+    public NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource){
+        return new NamedParameterJdbcTemplate(dataSource);
+    }
+
+    //ConnectionPool
+    @Bean
+    public DataSource hikariDatasource(DatabaseProperties databaseConfig){
+        HikariDataSource hikariDataSource = new HikariDataSource();
+
+        hikariDataSource.setJdbcUrl(databaseConfig.getUrl());
+        hikariDataSource.setUsername(databaseConfig.getLogin());
+        hikariDataSource.setPassword(databaseConfig.getPassword());
+        hikariDataSource.setDriverClassName(databaseConfig.getDriver());
+        hikariDataSource.setMaximumPoolSize(10);
+
+        return hikariDataSource;
+    }
+}
+
+Создаем класс JdbcTemplateUserRepository. Аннотация @Repository. Этот класс заменит класс UserRepository.
+Соответственно, он имплементит UserRepositoryInterface. Для его работы необходимо внедрить бины JdbcTemplate & NamedParameterJdbcTemplate. Также нужно вынести в отдельный класс UserRowMapper. И в последствии его также нужно внедрить в JdbcTemplateUserRepository.
+
+Класс UserRowMapper:
+Имплементится от встроенного в библиотеку интерфейса RowMapper<T>. В метод которого вписывается всё то же самое, что было в UserRowMapping методе.
+
+package by.lev.repository.jdbctamplate;
+
+import by.lev.domain.User;
+import org.springframework.jdbc.core.RowMapper;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import static by.lev.repository.UserColumns.ID;
+import static by.lev.repository.UserColumns.NAME;
+
+@Component
+public class UserRowMapper implements RowMapper<User> {
+    @Override
+    public User mapRow(ResultSet resultSet, int i) throws SQLException {
+        User user = new User();
+        user.setId(resultSet.getLong(ID));
+        user.setName(resultSet.getString(NAME));
+        return user;
+    }
+}
+
+
+- - - Logging - - -
+Скачиваем библиотеку с mvn repository - log4j.
+Добавляем в ресурсы файл log4j.properties.
+
+ссылка на файл с настройками - https://github.com/EgorLyubichev/myExperience/blob/master/src/main/resources/log4j.properties
+
+P.s. по большому счёту, конфигурации log4j.properties довольно похожи на разных проектах.
+
+
+- - - Настройка конфигурационных файлов - - -
+В общем случае выделяют один класс, являющийся главным конфигурационным файлом. 
+К нему добавляют аннотации:
+@Configuration
+@Import({TheFirstConfigClass.class, TheSecondConfigClass.class})
+@EnableAspectJAutoProxy(proxyTargetClass = true)
+@ComponentScan("by.lev")
+
+@Configuration - означает, что это конфигурационный класс 
+@Import({TheFirstConfigClass.class, TheSecondConfigClass.class}) - импортируются все те подклассы, что являются также конфигурационными (у них также остаётся @Configuration).
+@EnableAspectJAutoProxy(proxyTargetClass = true) - позволяет использовать аспекты в дериктории, указанной в аннотации @ComponentScan.
+@ComponentScan("by.lev") - указывает Спрингу область сканирования классов на наличие бинов.
+
+ 
+
+
+
+
+
+
+
+
+

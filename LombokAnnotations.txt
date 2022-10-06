@@ -1,0 +1,25 @@
+@NonNull - переменная (или объект) не должна принимать значение null. (???)
+@Setter / @Getter - понятно
+@ToString - понятно
+@EqualsAndHashCode - понятно
+@NoArgsConstructor - дефолтный конструктор
+
+- @RequiredArgsConstructor конструктор с выбранными параметрами (но можно и от руки прописать, так нагляднее)
+Для того, чтобы не писать конструктор, мы можем объявить @RequiredArgsConstructor (from Lombok), которая сделает всё за нас. Нам, главное, объявить private final поля, которые должны попасть в конструктор и lombok создаст конструктор, задействовав эти поля.
+
+
+@AllArgsConstructor - конструктор со всеми параметрами
+@Data - генерация всех служебных методов,заменяет сразу команды @ToString, @EqualsAndHashCode, Getter, Setter, @RequiredArgsConstructor
+@Value - создание неизменяемых классов (заменяет конструкторы, equals & hashcode, getters, toString, но не создает сеттеров => изменнить объекты данного класса после первоначального создания не удастся)
+@Builder - призван строить объект. Т.е. при такой аннотации, объект можно строить следующим образом:
+Person egor = Person.builder().name("Egor").lastName("Lyubichev").age(28).build();
+
+@Data
+@Builder
+@AllArgsConstructor
+class Person {
+    private final String name;
+    private final String lastName;
+    private int age;
+}
+
